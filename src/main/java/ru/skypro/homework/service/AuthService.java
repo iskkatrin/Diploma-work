@@ -6,16 +6,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
-import ru.skypro.homework.repository.AuthRepositry;
+import ru.skypro.homework.repository.AuthRepository;
 
 @Service
 public class AuthService {
-    private final AuthRepositry authRepositry;
+    private final AuthRepository authRepository;
     private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
 
-    public AuthService(AuthRepositry authRepositry, UserDetailsManager manager, PasswordEncoder encoder) {
-        this.authRepositry = authRepositry;
+    public AuthService(AuthRepository authRepository, UserDetailsManager manager, PasswordEncoder encoder) {
+        this.authRepository = authRepository;
         this.manager = manager;
         this.encoder = encoder;
     }

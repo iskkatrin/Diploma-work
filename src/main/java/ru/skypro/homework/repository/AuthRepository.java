@@ -1,8 +1,9 @@
 package ru.skypro.homework.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.skypro.homework.dto.Register;
 
-public interface AuthRepositry {
+public interface AuthRepository extends JpaRepository {
 
     boolean login(String userName, String password);
 
