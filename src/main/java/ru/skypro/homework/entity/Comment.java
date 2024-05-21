@@ -3,21 +3,26 @@ package ru.skypro.homework.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.List;
-
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Table
-public class Comments {
+
+public class Comment {
     @Id
     @GeneratedValue
-    private long commentsId;
-    private int count;
-    private List<Comment> results;
+    private long commentId;
+    private String author;
+    private String authorImage;
+    private String authorFirstName;
+    private Integer createdAt;
+    private Integer pk;
+    private String text;
+
 }

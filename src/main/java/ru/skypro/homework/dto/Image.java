@@ -14,5 +14,4 @@ public class Image {
     private String mediaType;
     private byte[] data;
 
-
 }
