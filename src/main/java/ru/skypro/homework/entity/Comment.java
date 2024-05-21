@@ -4,10 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -18,11 +16,14 @@ public class Comment {
     @Id
     @GeneratedValue
     private long commentId;
-    private String author;
+    @ManyToOne
+    @JoinColumn(name = "ad_item_id")
+    private Ad ad;
+    private long adId;
+    private int author;
     private String authorImage;
     private String authorFirstName;
-    private Integer createdAt;
+    private int createdAt;
     private Integer pk;
     private String text;
-
 }
