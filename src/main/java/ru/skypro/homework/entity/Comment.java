@@ -26,6 +26,4 @@ public class Comment {
     private int createdAt;
     private Integer pk;
     private String text;
-
-
 }
