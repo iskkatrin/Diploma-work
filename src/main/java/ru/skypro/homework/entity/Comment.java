@@ -1,5 +1,6 @@
 package ru.skypro.homework.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,14 +17,18 @@ public class Comment {
     @Id
     @GeneratedValue
     private long commentId;
-    @ManyToOne
-    @JoinColumn(name = "ad_item_id")
-    private Ad ad;
+//    @ManyToOne
+//    @JoinColumn(name = "ad_item_id")
+//    private Ad ad;   не увидел такого в условиях и изза этого ошибка вылезает
     private long adId;
     private int author;
     private String authorImage;
     private String authorFirstName;
     private int createdAt;
-    private Integer pk;
+    private int pk;
     private String text;
+    @ManyToOne
+    @JoinColumn(name = "Comments_id")
+    @JsonIgnore//обезательно иначе вложенность в друг друга будет
+    private Comments comments;
 }

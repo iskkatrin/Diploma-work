@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ru.skypro.homework.entity.Image;
 
 public interface ImageRepository extends JpaRepository<Image, Long> {
-    Image findImageById(Long userId);
+    Image findImageByImageId(Long userId);
 
     Image findImageByFilePath(String filePath);
 }

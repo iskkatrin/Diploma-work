@@ -18,9 +18,10 @@ public class Ad {
     private long itemId;
     private String itemName;
     private String author;
-    private MultipartFile image;
+    private String image;
     private double price;
     private String title;
+
     @OneToOne
     @JoinColumn(name = "comments_comments_id")
     private Comments comments;
