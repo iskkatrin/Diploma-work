@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ import java.io.IOException;
 @RequestMapping("/users")
 public class UserController {
 
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final ImageService service;
 
     @Autowired
@@ -75,6 +78,10 @@ public class UserController {
         try {
             service.uploadImage(userId, image);
         } catch (NotSaveAvatarEx e) {
+            log.warn("NotSaveAvatarException in save image");
+            return ResponseEntity.badRequest().build();
+        } catch (IOException e) {
+            log.warn("IOException in save image");
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().build();

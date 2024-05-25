@@ -21,30 +21,37 @@ public class AdsService {
     }
 
     public List<Ad> getAllAds() {
+        return null;
     }
 
     public Ad addAd(CreateOrUpdateAd properties, MultipartFile image) {
+        return null;
     }
 
     public List<Comment> getCommentsForAd(int id) {
+        return null;
     }
 
     public Comment addCommentToAd(int id, CreateOrUpdateComment comment) {
+        return null;
     }
 
     public ExtendedAd getAdById(int id) {
+        return null;
     }
 
     public void removeAd(int id) {
     }
 
     public Ad updateAd(int id, CreateOrUpdateAd ad) {
+        return null;
     }
 
     public void updateAdImage(int id, MultipartFile image) {
     }
 
     public List<Ad> getAdsForLoggedInUser() {
+        return null;
     }
 }
 
