@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository <Comment, Long> {
-    List<Comment> findByAdId(int adId);
+    List<Comment> findByAdId(long adId);
 
-    Optional<Comment> findByIdAndAdId(int commentId, int adId);
+    Optional<Comment> findByCommentIdAndAdId(long commentId, long adId);
 }

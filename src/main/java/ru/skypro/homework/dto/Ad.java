@@ -9,7 +9,8 @@ public class Ad {
     private String pk;
     private Integer author;
     @Schema( type = "string", format = "binary")
-    private Image image;
+    private String image;
+//    private Image image;
     private Integer price;
     private String title;
 }
