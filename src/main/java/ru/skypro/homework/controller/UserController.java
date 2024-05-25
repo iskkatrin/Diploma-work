@@ -5,16 +5,29 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.exceptions.NotSaveAvatarEx;
+import ru.skypro.homework.service.ImageService;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
+    private final ImageService service;
+
+    @Autowired
+    public UserController(ImageService service) {
+        this.service = service;
+    }
+
 
     @PostMapping("/set_password")
     @Operation(summary = "Обновление пароля")
@@ -56,6 +69,14 @@ public class UserController {
     })
     public ResponseEntity<Void> updateUserImage(@RequestParam("image") MultipartFile image) {
         // Logic for updating user image
+        // from S security we get user id
+        Long userId = 1L;
+
+        try {
+            service.uploadImage(userId, image);
+        } catch (NotSaveAvatarEx e) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok().build();
     }
 }
