@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +15,7 @@ public class AuthService {
     private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
 
+    @Autowired
     public AuthService(UserDetailsManager manager, PasswordEncoder encoder) {
 //        this.authRepository = authRepository;
         this.manager = manager;
