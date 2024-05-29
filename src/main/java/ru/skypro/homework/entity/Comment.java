@@ -32,3 +32,4 @@ public class Comment {
     @JsonIgnore//обезательно иначе вложенность в друг друга будет
     private Comments comments;
 }
+

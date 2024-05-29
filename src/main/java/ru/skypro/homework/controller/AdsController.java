@@ -32,8 +32,8 @@ public class AdsController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK")
     })
-    public ResponseEntity<List<Ad>> getAllAds() {
-        List<Ad> ads = adsService.getAllAds();
+    public ResponseEntity<List<AdDTO>> getAllAds() {
+        List<AdDTO> ads = adsService.getAllAds();
         return ResponseEntity.ok(ads);
     }
 
@@ -43,9 +43,9 @@ public class AdsController {
             @ApiResponse(responseCode = "201", description = "Created"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    public ResponseEntity<Ad> addAd(@RequestParam("properties") CreateOrUpdateAd properties,
-                                    @RequestParam("image") MultipartFile image) {
-        Ad ad = adsService.addAd(properties, image);
+    public ResponseEntity<AdDTO> addAd(@RequestParam("properties") CreateOrUpdateAd properties,
+                                       @RequestParam("image") MultipartFile image) {
+        AdDTO ad = adsService.addAd(properties, image);
         return new ResponseEntity<>(ad, HttpStatus.CREATED);
     }
 
@@ -91,13 +91,13 @@ public class AdsController {
     @Operation(summary = "Обновление информации об объявлении")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(schema = @Schema(implementation = Ad.class))),
+                    content = @Content(schema = @Schema(implementation = AdDTO.class))),
                     @ApiResponse(responseCode = "401", description = "Unauthorized"),
                     @ApiResponse(responseCode = "403", description = "Forbidden"),
                     @ApiResponse(responseCode = "404", description = "Not found")
                     })
-            public ResponseEntity<Ad>updateAd(@PathVariable int id, @RequestBody CreateOrUpdateAd ad) {
-        Ad updatedAd = adsService.updateAd(id, ad);
+            public ResponseEntity<AdDTO>updateAd(@PathVariable int id, @RequestBody CreateOrUpdateAd ad) {
+        AdDTO updatedAd = adsService.updateAd(id, ad);
         return ResponseEntity.ok(updatedAd);
     }
 
@@ -115,8 +115,9 @@ public class AdsController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<List<Ad>> getAdsMe() {
-        List<Ad> ads = adsService.getAdsForLoggedInUser();
+    public ResponseEntity<List<AdDTO>> getAdsMe() {
+        List<AdDTO> ads = adsService.getAdsForLoggedInUser();
         return ResponseEntity.ok(ads);
     }
 }
+
