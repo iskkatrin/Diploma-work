@@ -15,11 +15,11 @@ import jakarta.persistence.*;
 public class User {
     @Id
     @GeneratedValue
-    private long userId;
+    private Long userId;
     private String username;
     private String password;
     private String firstName;
     private String lastName;
     private String phone;
-    private Role role;
+    private String role;
 }

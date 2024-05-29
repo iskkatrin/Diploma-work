@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -15,14 +15,13 @@ import jakarta.persistence.*;
 public class Ad {
     @Id
     @GeneratedValue
-    private long itemId;
-    private String itemName;
+    private Long id;
+    private Long authorId;
     private String author;
     private String image;
-    private double price;
+    private Integer price;
     private String title;
+    private String description;
 
-    @OneToOne
-    @JoinColumn(name = "comments_comments_id")
-    private Comments comments;
 }
+

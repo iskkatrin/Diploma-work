@@ -1,6 +1,5 @@
 package ru.skypro.homework.service;
 
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +11,12 @@ import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exceptions.NotSaveAvatarEx;
 import ru.skypro.homework.repository.ImageRepository;
 
-
+import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
+import java.util.Optional;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -39,11 +40,11 @@ public class ImageService {
 
 
     public void uploadImage(Long userId, MultipartFile image) throws IOException {
-        User user = userService.findUser(userId); //поиск нужного студента
+        Optional<User> user = userService.getUserById(userId); //поиск нужного студента
 
         Path filePath;
         try {
-            filePath = Path.of(avatarsDir, user.toString() + "." + getExtensions(image.getOriginalFilename()));
+            filePath = Path.of(avatarsDir, user.get().toString() + "." + getExtensions(Objects.requireNonNull(image.getOriginalFilename())));
         } catch (Exception e) {
             throw new NotSaveAvatarEx("ошибка сохранения фотографии в БД");
         }
