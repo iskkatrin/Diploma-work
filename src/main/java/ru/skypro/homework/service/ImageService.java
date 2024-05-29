@@ -15,6 +15,8 @@ import javax.transaction.Transactional;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
+import java.util.Optional;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -38,11 +40,11 @@ public class ImageService {
 
 
     public void uploadImage(Long userId, MultipartFile image) throws IOException {
-        User user = userService.findUser(userId); //поиск нужного студента
+        Optional<User> user = userService.getUserById(userId); //поиск нужного студента
 
         Path filePath;
         try {
-            filePath = Path.of(avatarsDir, user.toString() + "." + getExtensions(image.getOriginalFilename()));
+            filePath = Path.of(avatarsDir, user.get().toString() + "." + getExtensions(Objects.requireNonNull(image.getOriginalFilename())));
         } catch (Exception e) {
             throw new NotSaveAvatarEx("ошибка сохранения фотографии в БД");
         }

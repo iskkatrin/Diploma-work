@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
+import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exceptions.NotSaveAvatarEx;
 import ru.skypro.homework.service.ImageService;
+import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -27,10 +30,24 @@ public class UserController {
     private final ImageService service;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     public UserController(ImageService service) {
         this.service = service;
     }
 
+    @GetMapping("/{id}")
+    public UserDTO getUser(@PathVariable Long id) {
+        Optional<User> user = userService.getUserById(id);
+        return userService.getUserDTO(user);
+    }
+
+    @PostMapping
+    public void createUser(@RequestBody UserDTO userDTO) {
+        User user = userService.getUser(userDTO);
+        userService.saveUser(user);
+    }
 
     @PostMapping("/set_password")
     @Operation(summary = "Обновление пароля")
