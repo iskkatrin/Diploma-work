@@ -1,11 +1,15 @@
 package ru.skypro.homework.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.exceptions.UserNotFoundException;
+import ru.skypro.homework.mapper.UserMapper;
+import ru.skypro.homework.repository.UserRepository;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -23,7 +27,6 @@ public class UserService {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
-
     public UserDTO getUserDTO(Optional<User> user) {
         return UserMapper.INSTANCE.userToUserDTO(user);
     }
@@ -40,4 +43,5 @@ public class UserService {
         userRepository.save(user);
     }
 }
+
 
