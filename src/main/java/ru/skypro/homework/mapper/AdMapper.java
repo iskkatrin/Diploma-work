@@ -13,3 +13,4 @@ import ru.skypro.homework.entity.Ad;
         Ad adDTOToAd(AdDTO adDTO);
     }
 
+

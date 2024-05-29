@@ -8,3 +8,4 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
 
     Image findImageByFilePath(String filePath);
 }
+

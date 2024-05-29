@@ -14,3 +14,4 @@ public class AdDTO {
     private Integer price;
     private String title;
 }
+
