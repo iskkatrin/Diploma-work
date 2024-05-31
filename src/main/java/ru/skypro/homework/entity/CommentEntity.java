@@ -1,11 +1,12 @@
 package ru.skypro.homework.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comments;
 
-import javax.persistence.*;
 
 @Entity
 @Data
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table
 
-public class Comment {
+public class CommentEntity {
     @Id
     @GeneratedValue
     private long commentId;

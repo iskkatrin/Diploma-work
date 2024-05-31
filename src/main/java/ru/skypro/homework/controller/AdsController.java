@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.entity.Comment;
+import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.service.AdsService;
 
 
@@ -50,15 +50,15 @@ public class AdsController {
     }
 
     @GetMapping("/{id}/comments")
-    public ResponseEntity<List<Comment>> getComments(@PathVariable int id) {
-        List<Comment> comments = adsService.getCommentsForAd(id);
-        return ResponseEntity.ok(comments);
+    public ResponseEntity<List<CommentEntity>> getComments(@PathVariable int id) {
+        List<CommentEntity> commentEntities = adsService.getCommentsForAd(id);
+        return ResponseEntity.ok(commentEntities);
     }
 
     @PostMapping("/{id}/comments")
-    public ResponseEntity<Comment> addComment(@PathVariable int id, @RequestBody CreateOrUpdateComment comment) {
-        Comment newComment = adsService.addCommentToAd(id, comment);
-        return ResponseEntity.ok(newComment);
+    public ResponseEntity<CommentEntity> addComment(@PathVariable int id, @RequestBody CreateOrUpdateComment comment) {
+        CommentEntity newCommentEntity = adsService.addCommentToAd(id, comment);
+        return ResponseEntity.ok(newCommentEntity);
     }
 
     @GetMapping("/{id}")

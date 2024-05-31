@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exceptions.NotSaveAvatarEx;
 import ru.skypro.homework.repository.ImageRepository;
 
-import javax.transaction.Transactional;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
