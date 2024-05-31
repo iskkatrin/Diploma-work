@@ -1,28 +1,37 @@
 package ru.skypro.homework.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.persistence.*;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table
+@Table(name = "ads")
 public class Ad {
     @Id
     @GeneratedValue
     private long itemId;
     private String itemName;
     private String author;
-    private String image;
     private double price;
     private String title;
 
     @OneToOne
     @JoinColumn(name = "comments_comments_id")
-    private Comments comments;
+    private Comment comments;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 }
+
