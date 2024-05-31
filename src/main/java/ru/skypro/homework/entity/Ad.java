@@ -1,9 +1,5 @@
 package ru.skypro.homework.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,13 +15,14 @@ import javax.persistence.*;
 public class Ad {
     @Id
     @GeneratedValue
-    private Long id;
-    private Long authorId;
+    private long itemId;
+    private String itemName;
     private String author;
     private String image;
-    private Integer price;
+    private double price;
     private String title;
-    private String description;
 
+    @OneToOne
+    @JoinColumn(name = "comments_comments_id")
+    private Comments comments;
 }
-

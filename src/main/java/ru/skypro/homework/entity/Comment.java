@@ -31,5 +31,9 @@ public class Comment {
     @JoinColumn(name = "Comments_id")
     @JsonIgnore//обезательно иначе вложенность в друг друга будет
     private Comments comments;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }
 
