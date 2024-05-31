@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class Comment {
+public class CommentDTO {
 
     private Integer author;
     private String authorImage;
