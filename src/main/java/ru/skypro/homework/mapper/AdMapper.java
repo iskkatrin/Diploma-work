@@ -1,11 +1,12 @@
 package ru.skypro.homework.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.skypro.homework.config.MapperConfig;
 import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.entity.AdEntity;
 
-
+@Service
 public class AdMapper {
     private final MapperConfig mapper;
 

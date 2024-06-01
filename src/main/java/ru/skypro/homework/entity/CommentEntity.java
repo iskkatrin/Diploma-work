@@ -16,16 +16,18 @@ import jakarta.persistence.*;
 public class CommentEntity {
     @Id
     @GeneratedValue
-    private long commentId;
+    private Long commentId;
 //    @ManyToOne
 //    @JoinColumn(name = "ad_item_id")
 //    private Ad ad;   не увидел такого в условиях и изза этого ошибка вылезает
-    private long adId;
-    private int author;
+
+    //такого поля я тоже не увидел в условии
+//    private Long adId;
+    private Integer author;
     private String authorImage;
     private String authorFirstName;
-    private int createdAt;
-    private int pk;
+    private Integer createdAt;
+    private Integer pk;
     private String text;
 }
 
