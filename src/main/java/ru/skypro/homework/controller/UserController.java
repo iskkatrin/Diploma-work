@@ -39,8 +39,16 @@ public class UserController {
 
     @GetMapping("/{id}")
     public UserDTO getUser(@PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
-        return userService.getUserDTO(user);
+        User user = null;
+        try {
+            user = userService.getUserById(id);
+
+        } catch (Exception e) {
+            log.info("user is null");
+            return null;
+        }
+        UserDTO userDTO = userService.getUserDTO(user);
+        return userDTO;
     }
 
     @PostMapping

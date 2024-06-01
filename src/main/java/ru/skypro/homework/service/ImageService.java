@@ -41,11 +41,11 @@ public class ImageService {
 
 
     public void uploadImage(Long userId, MultipartFile image) throws IOException {
-        Optional<User> user = userService.getUserById(userId); //поиск нужного студента
+        User user = userService.getUserById(userId); //поиск нужного студента
 
         Path filePath;
         try {
-            filePath = Path.of(avatarsDir, user.get().toString() + "." + getExtensions(Objects.requireNonNull(image.getOriginalFilename())));
+            filePath = Path.of(avatarsDir, user + "." + getExtensions(Objects.requireNonNull(image.getOriginalFilename())));
         } catch (Exception e) {
             throw new NotSaveAvatarEx("ошибка сохранения фотографии в БД");
         }

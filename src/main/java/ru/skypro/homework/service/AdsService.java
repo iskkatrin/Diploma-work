@@ -8,7 +8,7 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.CommentEntity;
-import ru.skypro.homework.mapper.AdMapper;
+//import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdsRepository;
 
 import java.util.List;
@@ -20,11 +20,13 @@ public class AdsService {
 
 
     public AdDTO getAdDTO(Ad ad) {
-        return AdMapper.INSTANCE.adToAdDTO(ad);
+//        return AdMapper.INSTANCE.adToAdDTO(ad);
+        return null;
     }
 
     public Ad getAd(AdDTO adDTO) {
-        return AdMapper.INSTANCE.adDTOToAd(adDTO);
+//        return AdMapper.INSTANCE.adDTOToAd(adDTO);
+        return null;
     }
 
     public AdsService(AdsRepository adsRepository) {
@@ -67,4 +69,4 @@ public class AdsService {
 }
 
 
-   
+

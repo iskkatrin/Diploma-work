@@ -6,9 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class NewPassword {
-
+    //not found validate
     private String currentPassword;
-
     private String newPassword;
-
 }

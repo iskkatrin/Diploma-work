@@ -17,27 +17,33 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     public User findUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
-    public UserDTO getUserDTO(Optional<User> user) {
-        return UserMapper.INSTANCE.userToUserDTO(user);
+    public UserDTO getUserDTO(User user) {
+        return userMapper.userToUserDTO(user);
     }
 
     public User getUser(UserDTO userDTO) {
-        return UserMapper.INSTANCE.userDTOToUser(userDTO);
+        return userMapper.userDTOToUser(userDTO);
     }
 
 
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findByUserId(id);
+    public User getUserById(Long id) {
+        User byUserId = userRepository.findByUserId(id);
+        if (byUserId == null) {
+            throw new RuntimeException();
+        }
+        return byUserId;
     }
     public void saveUser(User user) {
         userRepository.save(user);
