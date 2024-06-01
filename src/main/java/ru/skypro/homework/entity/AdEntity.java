@@ -16,16 +16,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table
-public class Ad {
+public class AdEntity {
     @Id
     @GeneratedValue
     private Long id;
     private Long authorId;
-    private String author;
     private String image;
     private Integer price;
     private String title;
-    private String description;
-
+    //убрал тк нигде не написано про это поле
+//    private String description;
 }
 
