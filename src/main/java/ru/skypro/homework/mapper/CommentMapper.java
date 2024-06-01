@@ -22,7 +22,10 @@ public class CommentMapper {
     }
 
     public CommentEntity commentDTOToCommentEntityWithoutId(CommentDTO commentDTO) {
-        return mapper.getMapper().map(commentDTO, CommentEntity.class);
+        CommentEntity commentEntity = mapper.getMapper().map(commentDTO, CommentEntity.class);
+        //не знаю откуда брать ad id
+        commentEntity.setAdId(-1L);
+        return commentEntity;
     }
 
 }

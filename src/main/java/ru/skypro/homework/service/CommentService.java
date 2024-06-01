@@ -1,6 +1,8 @@
 package ru.skypro.homework.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.entity.CommentEntity;
@@ -14,10 +16,12 @@ import java.util.List;
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
+    private final CommentMapper commentMapper;
 
-
-    public CommentService(CommentRepository commentRepository) {
+@Autowired
+    public CommentService(CommentRepository commentRepository, CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
+        this.commentMapper = commentMapper;
     }
 
     public CommentEntity addComment(int adId, CreateOrUpdateComment comment) {
@@ -28,7 +32,7 @@ public class CommentService {
         CommentsDTO comments =new CommentsDTO();
         List<CommentDTO> result = new ArrayList<>();
         for (CommentEntity commentEntity : commentRepository.findAll()) {
-            result.add(CommentMapper.INSTANCE.commentToCommentDTO(commentEntity));
+            result.add(commentMapper.commentEntityToCommentDTO(commentEntity));
         }
         comments.setResults(result);
         comments.setCount(result.size());

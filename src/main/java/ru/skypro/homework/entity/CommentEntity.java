@@ -22,8 +22,7 @@ public class CommentEntity {
 //    @JoinColumn(name = "ad_item_id")
 //    private Ad ad;   не увидел такого в условиях и изза этого ошибка вылезает
 
-    //такого поля я тоже не увидел в условии
-//    private Long adId;
+    private Long adId;
     private Integer author;
     private String authorImage;
     private String authorFirstName;
