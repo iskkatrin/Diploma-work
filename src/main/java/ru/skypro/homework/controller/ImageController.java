@@ -16,7 +16,7 @@ import ru.skypro.homework.service.ImageService;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/image")
 public class ImageController {
 
     private static final Logger log = LoggerFactory.getLogger(ImageController.class);

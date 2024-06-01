@@ -1,9 +1,9 @@
 package ru.skypro.homework.service;
 
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.CommentRepository;

@@ -1,12 +1,12 @@
 package ru.skypro.homework.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comments;
 
+import jakarta.persistence.*;
 
 @Entity
 @Data
@@ -28,9 +28,5 @@ public class CommentEntity {
     private int createdAt;
     private int pk;
     private String text;
-    @ManyToOne
-    @JoinColumn(name = "Comments_id")
-    @JsonIgnore//обезательно иначе вложенность в друг друга будет
-    private Comments comments;
 }
 
