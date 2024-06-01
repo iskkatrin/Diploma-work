@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.config.MapperConfig;
 import ru.skypro.homework.dto.UserDTO;
-import ru.skypro.homework.entity.User;
+import ru.skypro.homework.entity.UserEntity;
 
 @Service
 public class UserMapper {
@@ -16,15 +16,17 @@ public class UserMapper {
         this.mapper = mapper;
     }
 
-    public UserDTO userToUserDTO(User user) {
-        UserDTO userDTO = mapper.getMapper().map(user, UserDTO.class);
-        userDTO.setId(Math.toIntExact(user.getUserId()));
+    public UserDTO userEntityToUserDTO(UserEntity userEntity) {
+        UserDTO userDTO = mapper.getMapper().map(userEntity, UserDTO.class);
+        userDTO.setId(Math.toIntExact(userEntity.getUserId()));
         userDTO.setImage("нужно подправить маппер пока нет реализации с image");
         return userDTO;
     }
 
-    public User userDTOToUser(UserDTO userDTO) {
-        return null;
+    public UserEntity userDTOToUserEntity(UserDTO userDTO) {
+        UserEntity userEntity = mapper.getMapper().map(userDTO, UserEntity.class);
+        userEntity.setUserId(Long.valueOf(userDTO.getId()));
+        return userEntity;
     }
 }
 

@@ -14,13 +14,12 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDTO;
-import ru.skypro.homework.entity.User;
+import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exceptions.NotSaveAvatarEx;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -39,22 +38,22 @@ public class UserController {
 
     @GetMapping("/{id}")
     public UserDTO getUser(@PathVariable Long id) {
-        User user = null;
+        UserEntity userEntity = null;
         try {
-            user = userService.getUserById(id);
+            userEntity = userService.getUserById(id);
 
         } catch (Exception e) {
             log.info("user is null");
             return null;
         }
-        UserDTO userDTO = userService.getUserDTO(user);
+        UserDTO userDTO = userService.getUserDTO(userEntity);
         return userDTO;
     }
 
     @PostMapping
     public void createUser(@RequestBody UserDTO userDTO) {
-        User user = userService.getUser(userDTO);
-        userService.saveUser(user);
+        UserEntity userEntity = userService.getUser(userDTO);
+        userService.saveUser(userEntity);
     }
 
     @PostMapping("/set_password")
@@ -73,13 +72,13 @@ public class UserController {
     @Operation(summary = "Получение информации об авторизованном пользователе")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(schema = @Schema(implementation = User.class))),
+                    content = @Content(schema = @Schema(implementation = UserEntity.class))),
                     @ApiResponse(responseCode = "401", description = "Unauthorized")
                     })
-            public ResponseEntity<User>getUser(){
+            public ResponseEntity<UserEntity>getUser(){
             // Logic for fetching user info
-            User user=new User();
-            return ResponseEntity.ok(user);
+            UserEntity userEntity =new UserEntity();
+            return ResponseEntity.ok(userEntity);
             }
 
             @PatchMapping("/me")

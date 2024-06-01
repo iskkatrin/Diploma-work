@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.entity.Image;
-import ru.skypro.homework.entity.User;
+import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exceptions.NotSaveAvatarEx;
 import ru.skypro.homework.repository.ImageRepository;
 
@@ -17,7 +17,6 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
-import java.util.Optional;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -41,11 +40,11 @@ public class ImageService {
 
 
     public void uploadImage(Long userId, MultipartFile image) throws IOException {
-        User user = userService.getUserById(userId); //поиск нужного студента
+        UserEntity userEntity = userService.getUserById(userId); //поиск нужного студента
 
         Path filePath;
         try {
-            filePath = Path.of(avatarsDir, user + "." + getExtensions(Objects.requireNonNull(image.getOriginalFilename())));
+            filePath = Path.of(avatarsDir, userEntity + "." + getExtensions(Objects.requireNonNull(image.getOriginalFilename())));
         } catch (Exception e) {
             throw new NotSaveAvatarEx("ошибка сохранения фотографии в БД");
         }

@@ -5,12 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ru.skypro.homework.dto.UserDTO;
-import ru.skypro.homework.entity.User;
+import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
-
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -25,28 +23,28 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public User findUser(Long userId) {
+    public UserEntity findUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
-    public UserDTO getUserDTO(User user) {
-        return userMapper.userToUserDTO(user);
+    public UserDTO getUserDTO(UserEntity userEntity) {
+        return userMapper.userEntityToUserDTO(userEntity);
     }
 
-    public User getUser(UserDTO userDTO) {
-        return userMapper.userDTOToUser(userDTO);
+    public UserEntity getUser(UserDTO userDTO) {
+        return userMapper.userDTOToUserEntity(userDTO);
     }
 
 
-    public User getUserById(Long id) {
-        User byUserId = userRepository.findByUserId(id);
+    public UserEntity getUserById(Long id) {
+        UserEntity byUserId = userRepository.findByUserId(id);
         if (byUserId == null) {
             throw new RuntimeException();
         }
         return byUserId;
     }
-    public void saveUser(User user) {
-        userRepository.save(user);
+    public void saveUser(UserEntity userEntity) {
+        userRepository.save(userEntity);
     }
 }
 
