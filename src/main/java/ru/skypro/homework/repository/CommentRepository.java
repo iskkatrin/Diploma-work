@@ -10,4 +10,6 @@ public interface CommentRepository extends JpaRepository <CommentEntity, Long> {
     List<CommentEntity> findByAdId(long adId);
 
     Optional<CommentEntity> findByCommentIdAndAdId(long commentId, long adId);
+
+    List<CommentEntity> findAllByAdId(Long adId);
 }

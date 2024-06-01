@@ -49,17 +49,17 @@ public class AdsController {
         return new ResponseEntity<>(ad, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{id}/comments")
-    public ResponseEntity<List<CommentEntity>> getComments(@PathVariable int id) {
-        List<CommentEntity> commentEntities = adsService.getCommentsForAd(id);
-        return ResponseEntity.ok(commentEntities);
-    }
+//    @GetMapping("/{id}/comments")
+//    public ResponseEntity<List<CommentEntity>> getComments(@PathVariable int id) {
+//        List<CommentEntity> commentEntities = adsService.getCommentsForAd(id);
+//        return ResponseEntity.ok(commentEntities);
+//    }
 
-    @PostMapping("/{id}/comments")
-    public ResponseEntity<CommentEntity> addComment(@PathVariable int id, @RequestBody CreateOrUpdateComment comment) {
-        CommentEntity newCommentEntity = adsService.addCommentToAd(id, comment);
-        return ResponseEntity.ok(newCommentEntity);
-    }
+//    @PostMapping("/{id}/comments")
+//    public ResponseEntity<CommentEntity> addComment(@PathVariable int id, @RequestBody CreateOrUpdateComment comment) {
+//        CommentEntity newCommentEntity = adsService.addCommentToAd(id, comment);
+//        return ResponseEntity.ok(newCommentEntity);
+//    }
 
     @GetMapping("/{id}")
     @Operation(summary = "Получение информации об объявлении")
