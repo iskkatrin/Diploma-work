@@ -1,31 +1,29 @@
 package ru.skypro.homework.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
-import ru.skypro.homework.entity.CommentEntity;
-import ru.skypro.homework.entity.CommentEntity;
-import ru.skypro.homework.mapper.CommentMapper;
+import ru.skypro.homework.entity.Comment;
+import ru.skypro.homework.entity.Comments;
+import ru.skypro.homework.entity.User;
 import ru.skypro.homework.repository.CommentRepository;
 
-import java.util.ArrayList;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final CommentMapper commentMapper;
 
-@Autowired
-    public CommentService(CommentRepository commentRepository, CommentMapper commentMapper) {
+
+    public CommentService(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
-        this.commentMapper = commentMapper;
     }
 
-    public CommentEntity addComment(int adId, CreateOrUpdateComment comment) {
-        return null;
+    public Comment addComment(int adId, CreateOrUpdateComment comment) {
+        Comment newComment = new Comment();
+        newComment.setAdId(adId);
+        newComment.setText(comment.getText());
+        return commentRepository.save(newComment);
     }
 
     public CommentsDTO getComments(Integer adId) {
@@ -39,16 +37,21 @@ public class CommentService {
         comments.setResults(result);
         comments.setCount(result.size());
 
-        return comments;
-    }
-
-    public void deleteComment(int adId, int commentId) {
-    }
-
-    public CommentEntity updateComment(int adId, int commentId, CreateOrUpdateComment comment) {
-        return null;
+    public void deleteComment(Long commentId) {
+        commentRepository.deleteById(commentId);
     }
 }
 
+    public Comment updateComment(int adId, int commentId, CreateOrUpdateComment comment) {
+        Optional<Comment> existingComment = commentRepository.findByCommentIdAndAdId(commentId, adId);
+        if (existingComment.isPresent()) {
+            Comment updatedComment = existingComment.get();
+            updatedComment.setText(comment.getText());
+            return commentRepository.save(updatedComment);
+        } else {
+            throw new CommentNotFoundException("Comment not found with adId: " + adId + " and commentId: " + commentId);
+        }
+    }
+}
 
 
