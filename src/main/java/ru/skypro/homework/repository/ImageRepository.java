@@ -1,10 +1,10 @@
 package ru.skypro.homework.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.skypro.homework.entity.Image;
+import ru.skypro.homework.entity.ImageEntity;
 
-public interface ImageRepository extends JpaRepository<Image, Long> {
-    Image findImageByImageId(Long userId);
+public interface ImageRepository extends JpaRepository<ImageEntity, Long> {
+    ImageEntity findImageByImageId(Long userId);
 
-    Image findImageByFilePath(String filePath);
+    ImageEntity findImageByFilePath(String filePath);
 }

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.entity.Image;
+import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exceptions.NotSaveAvatarEx;
 import ru.skypro.homework.repository.ImageRepository;
@@ -62,23 +62,23 @@ public class ImageService {
         }
 
 
-        Image newImage;
-        newImage = imageRepository.findImageByFilePath(filePath.toString());
+        ImageEntity newImageEntity;
+        newImageEntity = imageRepository.findImageByFilePath(filePath.toString());
 
 
-        if (newImage == null) {
-            newImage = new Image();
+        if (newImageEntity == null) {
+            newImageEntity = new ImageEntity();
         }
-        newImage.setImageId(userId);
-        newImage.setData(image.getBytes());
-        newImage.setFilePath(filePath.toString());
-        newImage.setMediaType(image.getContentType());
-        newImage.setFileSize(image.getSize());
+        newImageEntity.setImageId(userId);
+        newImageEntity.setData(image.getBytes());
+        newImageEntity.setFilePath(filePath.toString());
+        newImageEntity.setMediaType(image.getContentType());
+        newImageEntity.setFileSize(image.getSize());
 
 //        user.setAvatar(newImage);
         //добавить студенту его аву
 //        userService.update(user);
-        imageRepository.save(newImage);
+        imageRepository.save(newImageEntity);
 
     }
 
