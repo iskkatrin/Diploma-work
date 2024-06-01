@@ -31,8 +31,8 @@ public class CommentService {
     public CommentsDTO getComments(Integer adId) {
         CommentsDTO comments = new CommentsDTO();
         List<CommentDTO> result = new ArrayList<>();
-//        List<CommentEntity> allByAdId = commentRepository.findByAdId(adId.longValue());
-        List<CommentEntity> allByAdId = commentRepository.findAll();
+        List<CommentEntity> allByAdId = commentRepository.findByAdId(adId.longValue());
+
         for (CommentEntity commentEntity : allByAdId) {
             result.add(commentMapper.commentEntityToCommentDTO(commentEntity));
         }

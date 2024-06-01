@@ -18,8 +18,7 @@ public class CommentMapper {
     }
 
     public CommentDTO commentEntityToCommentDTO(CommentEntity commentEntity) {
-        CommentDTO map = mapper.getMapper().map(commentEntity, CommentDTO.class);
-        return map;
+        return mapper.getMapper().map(commentEntity, CommentDTO.class);
     }
 
     public CommentEntity commentDTOToCommentEntityWithoutId(CommentDTO commentDTO) {
