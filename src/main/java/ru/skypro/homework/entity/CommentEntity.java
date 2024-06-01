@@ -1,11 +1,11 @@
 package ru.skypro.homework.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Data
@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table
 
-public class Comment {
+public class CommentEntity {
     @Id
     @GeneratedValue
     private long commentId;
@@ -27,9 +27,5 @@ public class Comment {
     private int createdAt;
     private int pk;
     private String text;
-    @ManyToOne
-    @JoinColumn(name = "Comments_id")
-    @JsonIgnore//обезательно иначе вложенность в друг друга будет
-    private Comments comments;
 }
 

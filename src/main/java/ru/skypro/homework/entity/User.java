@@ -3,7 +3,7 @@ package ru.skypro.homework.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.skypro.homework.dto.Role;
+
 
 import jakarta.persistence.*;
 

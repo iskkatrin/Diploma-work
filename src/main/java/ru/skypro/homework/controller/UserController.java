@@ -87,7 +87,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    public ResponseEntity<Void> updateUserImage(@RequestParam("image") MultipartFile image) {
+    public ResponseEntity<?> updateUserImage(@RequestParam("image") MultipartFile image) {
         // Logic for updating user image
         // from S security we get user id
         Long userId = 1L;
