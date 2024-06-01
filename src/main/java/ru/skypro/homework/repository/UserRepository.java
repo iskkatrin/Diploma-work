@@ -1,11 +1,9 @@
 package ru.skypro.homework.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.skypro.homework.entity.User;
+import ru.skypro.homework.entity.UserEntity;
 
-import java.util.Optional;
-
-public interface UserRepository extends JpaRepository <User, Long> {
-    Optional<User> findByUserId(Long id);
+public interface UserRepository extends JpaRepository <UserEntity, Long> {
+    UserEntity findByUserId(Long id);
 }
 

@@ -1,25 +1,28 @@
 package ru.skypro.homework.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
-import ru.skypro.homework.dto.AdDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ru.skypro.homework.config.MapperConfig;
 import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.UserDTO;
-import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.entity.CommentEntity;
-import ru.skypro.homework.entity.User;
 
-import javax.xml.stream.events.Comment;
-import java.util.Optional;
-@Mapper
-public interface CommentMapper {
-    //ru.skypro.homework.mapper.CommentMapper INSTANCE = Mappers.getMapper(ru.skypro.homework.mapper.CommentMapper.class);
-    CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
+@Service
+public class CommentMapper {
 
-    //UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+    private final MapperConfig mapper;
 
+    @Autowired
+    public CommentMapper(MapperConfig mapper) {
+        this.mapper = mapper;
+    }
 
-    CommentDTO commentToCommentDTO(CommentEntity commentEntity);
-    CommentEntity commentDTOToComment(CommentDTO commentDTO);
+    public CommentDTO commentEntityToCommentDTO(CommentEntity commentEntity) {
+        return mapper.getMapper().map(commentEntity, CommentDTO.class);
+    }
+
+    public CommentEntity commentDTOToCommentEntityWithoutId(CommentDTO commentDTO) {
+        return mapper.getMapper().map(commentDTO, CommentEntity.class);
+    }
 
 }

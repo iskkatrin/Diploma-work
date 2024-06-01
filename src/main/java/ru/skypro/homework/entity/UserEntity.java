@@ -12,14 +12,16 @@ import jakarta.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class User {
+public class UserEntity {
     @Id
     @GeneratedValue
     private Long userId;
-    private String username;
-    private String password;
+    private String email;
     private String firstName;
     private String lastName;
     private String phone;
     private String role;
+    private String username;
+    private String password;
+    //нужно добавить связь с image
 }

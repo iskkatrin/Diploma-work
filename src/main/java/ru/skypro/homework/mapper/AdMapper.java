@@ -1,17 +1,31 @@
 package ru.skypro.homework.mapper;
 
-
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ru.skypro.homework.config.MapperConfig;
 import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.AdEntity;
 
-    @Mapper
-    public interface AdMapper {
-        ru.skypro.homework.mapper.AdMapper INSTANCE = Mappers.getMapper(ru.skypro.homework.mapper.AdMapper.class);
+@Service
+public class AdMapper {
+    private final MapperConfig mapper;
 
-        AdDTO adToAdDTO(Ad ad);
-        Ad adDTOToAd(AdDTO adDTO);
+    @Autowired
+    public AdMapper(MapperConfig mapper) {
+        this.mapper = mapper;
     }
+
+    public AdDTO adEntityToAdDTO(AdEntity adEntity) {
+        AdDTO adDTO = mapper.getMapper().map(adEntity, AdDTO.class);
+        adDTO.setAuthor(adEntity.getAuthorId().intValue());
+        //не знаю что такое pk, поэтому так написал
+        adDTO.setPk(-1);
+        return adDTO;
+    }
+
+    public AdEntity adDTOToAdEntityWithoutId(AdDTO adDTO) {
+        return mapper.getMapper().map(adDTO, AdEntity.class);
+    }
+}
 
 

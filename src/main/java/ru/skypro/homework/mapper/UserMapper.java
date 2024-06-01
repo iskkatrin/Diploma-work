@@ -1,17 +1,32 @@
 package ru.skypro.homework.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import ru.skypro.homework.config.MapperConfig;
 import ru.skypro.homework.dto.UserDTO;
-import ru.skypro.homework.entity.User;
+import ru.skypro.homework.entity.UserEntity;
 
-import java.util.Optional;
+@Service
+public class UserMapper {
 
-@Mapper
-public interface UserMapper {
-    UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+    private final MapperConfig mapper;
 
-    UserDTO userToUserDTO(Optional<User> user);
-    User userDTOToUser(UserDTO userDTO);
+    @Autowired
+    public UserMapper(MapperConfig mapper) {
+        this.mapper = mapper;
+    }
+
+    public UserDTO userEntityToUserDTO(UserEntity userEntity) {
+        UserDTO userDTO = mapper.getMapper().map(userEntity, UserDTO.class);
+        userDTO.setId(userEntity.getUserId().intValue());
+        userDTO.setImage("нужно подправить маппер пока нет реализации с image");
+        return userDTO;
+    }
+
+    public UserEntity userDTOToUserEntity(UserDTO userDTO) {
+        UserEntity userEntity = mapper.getMapper().map(userDTO, UserEntity.class);
+        userEntity.setUserId(userDTO.getId().longValue());
+        return userEntity;
+    }
 }
 
