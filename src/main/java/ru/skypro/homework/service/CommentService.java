@@ -25,10 +25,12 @@ public class CommentService {
         return commentRepository.save(newComment);
     }
 
-    public CommentsDTO getComments(int adId) {
-        CommentsDTO comments =new CommentsDTO();
+    public CommentsDTO getComments(Integer adId) {
+        CommentsDTO comments = new CommentsDTO();
         List<CommentDTO> result = new ArrayList<>();
-        for (CommentEntity commentEntity : commentRepository.findAll()) {
+        List<CommentEntity> allByAdId = commentRepository.findByAdId(adId.longValue());
+
+        for (CommentEntity commentEntity : allByAdId) {
             result.add(commentMapper.commentEntityToCommentDTO(commentEntity));
         }
         comments.setResults(result);

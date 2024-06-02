@@ -14,7 +14,6 @@ import ru.skypro.homework.repository.AdsRepository;
 import java.util.List;
 
 @Service
-
 public class AdsService {
     private final AdsRepository adsRepository;
 

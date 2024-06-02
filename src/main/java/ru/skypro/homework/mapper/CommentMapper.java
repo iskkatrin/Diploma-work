@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.config.MapperConfig;
 import ru.skypro.homework.dto.CommentDTO;
-import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.entity.CommentEntity;
+
 
 @Service
 public class CommentMapper {
