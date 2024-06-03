@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.entity.CommentEntity;
@@ -44,7 +45,8 @@ public class CommentController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<CommentEntity> addComment(@PathVariable("adId") int adId, @RequestBody CreateOrUpdateComment comment) {
+
+    public ResponseEntity<CommentEntity> addComment(@PathVariable("adId") Long adId, @RequestBody CreateOrUpdateComment comment) {
         CommentEntity addedCommentEntity = commentService.addComment(adId, comment);
         return ResponseEntity.ok(addedCommentEntity);
     }
@@ -71,11 +73,12 @@ public class CommentController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<CommentEntity> updateComment(@PathVariable("adId") int adId,
-                                                       @PathVariable("commentId") int commentId,
-                                                       @RequestBody CreateOrUpdateComment comment) {
-        CommentEntity updatedCommentEntity = commentService.updateComment(adId, commentId, comment);
-        return ResponseEntity.ok(updatedCommentEntity);
+
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable("adId") int adId,
+                                                    @PathVariable("commentId") Long commentId,
+                                                    @RequestBody CreateOrUpdateComment comment) {
+        CommentDTO updatedCommentDTO = commentService.updateComment(adId, commentId, comment);
+        return ResponseEntity.ok(updatedCommentDTO);
     }
 }
 
