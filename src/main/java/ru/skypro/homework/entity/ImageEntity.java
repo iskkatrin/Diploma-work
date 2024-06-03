@@ -10,7 +10,7 @@ import jakarta.persistence.*;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Image {
+public class ImageEntity {
     @Id
     @GeneratedValue
     private Long imageId;

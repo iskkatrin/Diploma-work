@@ -1,22 +1,22 @@
 package ru.skypro.homework.service;
 
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.entity.Image;
-import ru.skypro.homework.entity.User;
+import ru.skypro.homework.entity.ImageEntity;
+import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exceptions.NotSaveAvatarEx;
 import ru.skypro.homework.repository.ImageRepository;
 
-import javax.transaction.Transactional;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
-import java.util.Optional;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -40,11 +40,11 @@ public class ImageService {
 
 
     public void uploadImage(Long userId, MultipartFile image) throws IOException {
-        Optional<User> user = userService.getUserById(userId); //поиск нужного студента
+        UserEntity userEntity = userService.getUserById(userId); //поиск нужного студента
 
         Path filePath;
         try {
-            filePath = Path.of(avatarsDir, user.get().toString() + "." + getExtensions(Objects.requireNonNull(image.getOriginalFilename())));
+            filePath = Path.of(avatarsDir, userEntity + "." + getExtensions(Objects.requireNonNull(image.getOriginalFilename())));
         } catch (Exception e) {
             throw new NotSaveAvatarEx("ошибка сохранения фотографии в БД");
         }
@@ -62,23 +62,23 @@ public class ImageService {
         }
 
 
-        Image newImage;
-        newImage = imageRepository.findImageByFilePath(filePath.toString());
+        ImageEntity newImageEntity;
+        newImageEntity = imageRepository.findImageByFilePath(filePath.toString());
 
 
-        if (newImage == null) {
-            newImage = new Image();
+        if (newImageEntity == null) {
+            newImageEntity = new ImageEntity();
         }
-        newImage.setImageId(userId);
-        newImage.setData(image.getBytes());
-        newImage.setFilePath(filePath.toString());
-        newImage.setMediaType(image.getContentType());
-        newImage.setFileSize(image.getSize());
+        newImageEntity.setImageId(userId);
+        newImageEntity.setData(image.getBytes());
+        newImageEntity.setFilePath(filePath.toString());
+        newImageEntity.setMediaType(image.getContentType());
+        newImageEntity.setFileSize(image.getSize());
 
 //        user.setAvatar(newImage);
         //добавить студенту его аву
 //        userService.update(user);
-        imageRepository.save(newImage);
+        imageRepository.save(newImageEntity);
 
     }
 

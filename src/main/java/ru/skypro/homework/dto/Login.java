@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Login {
-
-    private String username;
+    //not found validate
     private String password;
+    private String username;
 }

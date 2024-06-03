@@ -6,25 +6,26 @@ import ru.skypro.homework.dto.AdDTO;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.dto.ExtendedAd;
-import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.entity.Comment;
-import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.entity.AdEntity;
+import ru.skypro.homework.entity.CommentEntity;
+//import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdsRepository;
 
 import java.util.List;
 
 @Service
-
 public class AdsService {
     private final AdsRepository adsRepository;
 
 
-    public AdDTO getAdDTO(Ad ad) {
-        return AdMapper.INSTANCE.adToAdDTO(ad);
+    public AdDTO getAdDTO(AdEntity adEntity) {
+//        return AdMapper.INSTANCE.adToAdDTO(ad);
+        return null;
     }
 
-    public Ad getAd(AdDTO adDTO) {
-        return AdMapper.INSTANCE.adDTOToAd(adDTO);
+    public AdEntity getAd(AdDTO adDTO) {
+//        return AdMapper.INSTANCE.adDTOToAd(adDTO);
+        return null;
     }
 
     public AdsService(AdsRepository adsRepository) {
@@ -39,11 +40,11 @@ public class AdsService {
         return null;
     }
 
-    public List<Comment> getCommentsForAd(int id) {
+    public List<CommentEntity> getCommentsForAd(int id) {
         return null;
     }
 
-    public Comment addCommentToAd(int id, CreateOrUpdateComment comment) {
+    public CommentEntity addCommentToAd(int id, CreateOrUpdateComment comment) {
         return null;
     }
 
@@ -67,4 +68,4 @@ public class AdsService {
 }
 
 
-   
+

@@ -5,17 +5,14 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.entity.Comment;
 import ru.skypro.homework.entity.Comments;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.exceptions.CommentNotFoundException;
 import ru.skypro.homework.repository.CommentRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
-
 
     public CommentService(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
@@ -28,13 +25,21 @@ public class CommentService {
         return commentRepository.save(newComment);
     }
 
-    public List<Comment> getComments(int adId) {
-        return commentRepository.findByAdId(adId);
-    }
+    public CommentsDTO getComments(Integer adId) {
+        CommentsDTO comments = new CommentsDTO();
+        List<CommentDTO> result = new ArrayList<>();
+        List<CommentEntity> allByAdId = commentRepository.findByAdId(adId.longValue());
+
+        for (CommentEntity commentEntity : allByAdId) {
+            result.add(commentMapper.commentEntityToCommentDTO(commentEntity));
+        }
+        comments.setResults(result);
+        comments.setCount(result.size());
 
     public void deleteComment(Long commentId) {
         commentRepository.deleteById(commentId);
     }
+}
 
     public Comment updateComment(int adId, int commentId, CreateOrUpdateComment comment) {
         Optional<Comment> existingComment = commentRepository.findByCommentIdAndAdId(commentId, adId);
