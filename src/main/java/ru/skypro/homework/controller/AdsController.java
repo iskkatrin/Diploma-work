@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
@@ -16,6 +17,7 @@ import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.service.AdsService;
 
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -43,9 +45,10 @@ public class AdsController {
             @ApiResponse(responseCode = "201", description = "Created"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    public ResponseEntity<AdDTO> addAd(@RequestParam("properties") CreateOrUpdateAd properties,
-                                       @RequestParam("image") MultipartFile image) {
-        AdDTO ad = adsService.addAd(properties, image);
+    public ResponseEntity<AdDTO> addAd (@RequestParam("properties") CreateOrUpdateAd properties,
+                                       @RequestParam("image") MultipartFile image,
+                                       Authentication authentication) throws IOException {
+        AdDTO ad = adsService.addAd(properties, image, authentication);
         return new ResponseEntity<>(ad, HttpStatus.CREATED);
     }
 

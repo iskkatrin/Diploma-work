@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.entity.CommentEntity;
@@ -31,7 +32,7 @@ public class CommentController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<CommentsDTO> getComments(@PathVariable("adId") int adId) {
+    public ResponseEntity<CommentsDTO> getComments(@PathVariable("adId") long adId) {
         CommentsDTO comments = commentService.getComments(adId);
         return ResponseEntity.ok(comments);
     }
@@ -40,13 +41,13 @@ public class CommentController {
     @Operation(summary = "Добавление комментария к объявлению")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(schema = @Schema(implementation = CommentEntity.class))),
+                    content = @Content(schema = @Schema(implementation = CommentDTO.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<CommentEntity> addComment(@PathVariable("adId") int adId, @RequestBody CreateOrUpdateComment comment) {
-        CommentEntity addedCommentEntity = commentService.addComment(adId, comment);
-        return ResponseEntity.ok(addedCommentEntity);
+    public ResponseEntity<CommentDTO> addComment(@PathVariable("adId") long adId, @RequestBody CreateOrUpdateComment comment) {
+        CommentDTO addedCommentDTO = commentService.addComment(adId, comment);
+        return ResponseEntity.ok(addedCommentDTO);
     }
 
     @DeleteMapping("/{commentId}")
@@ -57,7 +58,7 @@ public class CommentController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<Void> deleteComment(@PathVariable("adId") int adId, @PathVariable("commentId") int commentId) {
+    public ResponseEntity<Void> deleteComment(@PathVariable("adId") long adId, @PathVariable("commentId") long commentId) {
         commentService.deleteComment(adId, commentId);
         return ResponseEntity.ok().build();
     }
@@ -66,16 +67,16 @@ public class CommentController {
     @Operation(summary = "Обновление комментария")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(schema = @Schema(implementation = CommentEntity.class))),
+                    content = @Content(schema = @Schema(implementation = CommentDTO.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<CommentEntity> updateComment(@PathVariable("adId") int adId,
-                                                       @PathVariable("commentId") int commentId,
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable("adId") long adId,
+                                                       @PathVariable("commentId") long commentId,
                                                        @RequestBody CreateOrUpdateComment comment) {
-        CommentEntity updatedCommentEntity = commentService.updateComment(adId, commentId, comment);
-        return ResponseEntity.ok(updatedCommentEntity);
+        CommentDTO updatedCommentDTO = commentService.updateComment(adId, commentId, comment);
+        return ResponseEntity.ok(updatedCommentDTO);
     }
 }
 

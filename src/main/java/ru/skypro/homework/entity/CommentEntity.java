@@ -16,7 +16,7 @@ import jakarta.persistence.*;
 
 public class CommentEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue  //(strategy = GenerationType.)
     private Long commentId;
 //    @ManyToOne
 //    @JoinColumn(name = "ad_item_id")
