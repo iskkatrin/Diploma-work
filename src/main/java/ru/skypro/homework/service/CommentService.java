@@ -45,9 +45,10 @@ public class CommentService {
     }
 
 
-    public void deleteComment(Long commentId) {
+    public void deleteComment(int adId, long commentId) {
         commentRepository.deleteById(commentId);
     }
+
 
     public CommentDTO updateComment(int adId, Long commentId, CreateOrUpdateComment comment) {
         CommentEntity existingComment = commentRepository.findByCommentIdAndAdId(commentId, adId)
@@ -55,6 +56,7 @@ public class CommentService {
         existingComment.setText(comment.getText());
         return commentMapper.commentEntityToCommentDTO(commentRepository.save(existingComment));
     }
+
 }
 
 
