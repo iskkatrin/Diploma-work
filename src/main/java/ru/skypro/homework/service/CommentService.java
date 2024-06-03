@@ -54,6 +54,7 @@ public class CommentService {
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found with adId: " + adId + " and commentId: " + commentId));
         existingComment.setText(comment.getText());
         return commentMapper.commentEntityToCommentDTO(commentRepository.save(existingComment));
+
     }
 }
 
