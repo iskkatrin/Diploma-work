@@ -22,7 +22,7 @@ public class CommentService {
         this.commentMapper = commentMapper;
     }
 
-    public CommentDTO addComment(Long adId, CreateOrUpdateComment comment) {
+    public CommentDTO addComment(long adId, CreateOrUpdateComment comment) {
         CommentEntity newComment = new CommentEntity();
         newComment.setAdId(adId);
         newComment.setText(comment.getText());
@@ -31,10 +31,10 @@ public class CommentService {
         return commentMapper.commentEntityToCommentDTO(savedComment);
     }
 
-    public CommentsDTO getComments(Integer adId) {
+    public CommentsDTO getComments(long adId) {
         CommentsDTO comments = new CommentsDTO();
         List<CommentDTO> result = new ArrayList<>();
-        List<CommentEntity> allByAdId = commentRepository.findByAdId(adId.longValue()); //  преобразование Integer в long
+        List<CommentEntity> allByAdId = commentRepository.findByAdId(adId);
 
         for (CommentEntity commentEntity : allByAdId) {
             result.add(commentMapper.commentEntityToCommentDTO(commentEntity));
@@ -45,12 +45,11 @@ public class CommentService {
     }
 
 
-    public void deleteComment(int adId, long commentId) {
-        commentRepository.deleteById(commentId);
+    public void deleteComment(long adId, long commentId) {
+        commentRepository.deleteByCommentIdAndAdId(adId, commentId);
     }
 
-
-    public CommentDTO updateComment(int adId, Long commentId, CreateOrUpdateComment comment) {
+    public CommentDTO updateComment(long adId, long commentId, CreateOrUpdateComment comment) {
         CommentEntity existingComment = commentRepository.findByCommentIdAndAdId(commentId, adId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found with adId: " + adId + " and commentId: " + commentId));
         existingComment.setText(comment.getText());

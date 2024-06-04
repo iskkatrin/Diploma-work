@@ -14,4 +14,6 @@ public interface CommentRepository extends JpaRepository <CommentEntity, Long> {
     Optional<CommentEntity> findByCommentIdAndAdId(long commentId, long adId);
 
     List<CommentEntity> findAllByAdId(Long adId);
+
+    void deleteByCommentIdAndAdId(long commentId, long adId);
 }

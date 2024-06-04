@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class Ads {
+public class AdsDTO {
     private Integer count;
     private List<AdDTO> results;
 }

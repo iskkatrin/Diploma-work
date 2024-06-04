@@ -1,5 +1,7 @@
 package ru.skypro.homework.service;
 
+import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
@@ -17,6 +19,9 @@ import ru.skypro.homework.repository.CommentRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Collectors;
+
+import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 public class AdsService {
@@ -45,7 +50,7 @@ public class AdsService {
                 .collect(Collectors.toList());
     }
 
-    public AdDTO addAd(CreateOrUpdateAd properties, MultipartFile image) {
+    public AdDTO addAd(CreateOrUpdateAd properties, MultipartFile image, Authentication authentication) {
         AdEntity adEntity = adMapper.createOrUpdateAdToAdEntity(properties);
         // Сохранение изображения и установка пути к изображению в сущность
         adEntity.setImage(image.getOriginalFilename());
