@@ -9,5 +9,4 @@ import java.util.List;
 
 @Repository
 public interface AdsRepository extends JpaRepository<AdEntity, Long> {
-    List<CommentEntity> findByAdId(Long adId);
 }

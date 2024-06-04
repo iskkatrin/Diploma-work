@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -23,4 +25,10 @@ public class UserEntity {
     private String role;
     private String username;
     private String password;
+
+    @OneToMany(mappedBy = "userEntity")
+    private List<CommentEntity> commentEntity;
+
+    @OneToMany(mappedBy = "userEntity")
+    private List<AdEntity> adEntity;
 }
