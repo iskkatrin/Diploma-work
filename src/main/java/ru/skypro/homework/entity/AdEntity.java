@@ -27,7 +27,7 @@ public class AdEntity {
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "image_id")
     private ImageEntity imageEntity;
 
