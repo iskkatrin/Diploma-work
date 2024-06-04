@@ -50,7 +50,7 @@ public class AdsService {
                 .collect(Collectors.toList());
     }
 
-    public AdDTO addAd(CreateOrUpdateAd properties, MultipartFile image) {
+    public AdDTO addAd(CreateOrUpdateAd properties, MultipartFile image, Authentication authentication) {
         AdEntity adEntity = adMapper.createOrUpdateAdToAdEntity(properties);
         // Сохранение изображения и установка пути к изображению в сущность
         adEntity.setImage(image.getOriginalFilename());
