@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exceptions.UserNotFoundException;
@@ -45,6 +46,21 @@ public class UserService {
     }
     public void saveUser(UserEntity userEntity) {
         userRepository.save(userEntity);
+    }
+
+    public UpdateUser updateUser(Long userId, UpdateUser updateUser) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        if (updateUser.getFirstName() != null) {
+            userEntity.setFirstName(updateUser.getFirstName());
+        }
+        if (updateUser.getLastName() != null) {
+            userEntity.setLastName(updateUser.getLastName());
+        }
+        if (updateUser.getPhone() != null) {
+            userEntity.setPhone(updateUser.getPhone());
+        }
+        saveUser(userEntity);
+        return updateUser;
     }
 }
 

@@ -70,19 +70,26 @@ public class UserController {
     @GetMapping("/me")
     @Operation(summary = "Получение информации об авторизованном пользователе")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(schema = @Schema(implementation = UserEntity.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = @Content(schema = @Schema(implementation = UserDTO.class))
+            ),
+            @ApiResponse(responseCode = "401",
+                    description = "Unauthorized"
+            )
     })
-    public ResponseEntity<UserEntity> getUser() {
-        UserEntity userEntity = new UserEntity();
-        return ResponseEntity.ok(userEntity);
+    public ResponseEntity<UserDTO> getUser() {
+        UserDTO userDTO = new UserDTO();
+        return ResponseEntity.ok(userDTO);
     }
 
     @PatchMapping("/me")
     @Operation(summary = "Обновление информации об авторизованном пользователе")
     public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser) {
-        return ResponseEntity.ok(updateUser);
+        //заглушка тк не знаем какой пользователь(Лола поправить)
+        Long userId = 1L;
+        return ResponseEntity.ok(userService.updateUser(userId, updateUser));
     }
 
     @PatchMapping("/me/image")
@@ -92,8 +99,8 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     public ResponseEntity<?> updateUserImage(@RequestParam("image") MultipartFile image) {
+        //заглушка тк не получаем пользователя(Лола исправить)
         Long userId = 1L;
-
         try {
             service.uploadImage(userId, image);
         } catch (NotSaveAvatarEx e) {

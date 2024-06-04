@@ -46,7 +46,7 @@ public class CommentController {
             @ApiResponse(responseCode = "404", description = "Not found")
     })
 
-    public ResponseEntity<CommentEntity> addComment(@PathVariable("adId") Long adId, @RequestBody CreateOrUpdateComment comment) {
+    public ResponseEntity<CommentDTO> addComment(@PathVariable("adId") Long adId, @RequestBody CreateOrUpdateComment comment) {
         CommentEntity addedCommentEntity = commentService.addComment(adId, comment);
         return ResponseEntity.ok(addedCommentEntity);
     }
