@@ -4,124 +4,109 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.*;
+import ru.skypro.homework.dto.AdDTO;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
+import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 //import ru.skypro.homework.mapper.AdMapper;
-import ru.skypro.homework.entity.ImageEntity;
+import ru.skypro.homework.exceptions.AdNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdsRepository;
-import ru.skypro.homework.repository.ImageRepository;
-import ru.skypro.homework.repository.UserRepository;
+import ru.skypro.homework.repository.CommentRepository;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Collectors;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
-@AllArgsConstructor
 public class AdsService {
     private final AdsRepository adsRepository;
-    private final AdMapper mapper;
-    private final UserRepository userRepository;
-    private final ImageRepository imageRepository;
+    private final AdMapper adMapper;
+    private final CommentRepository commentRepository;
 
-
+    public AdsService(AdsRepository adsRepository, AdMapper adMapper, CommentRepository commentRepository) {
+        this.adsRepository = adsRepository;
+        this.adMapper = adMapper;
+        this.commentRepository = commentRepository;
+    }
 
     public AdDTO getAdDTO(AdEntity adEntity) {
-//        return AdMapper.INSTANCE.adToAdDTO(ad);
-        return null;
+        return adMapper.adEntityToAdDTO(adEntity);
     }
 
     public AdEntity getAd(AdDTO adDTO) {
-//        return AdMapper.INSTANCE.adDTOToAd(adDTO);
-        return null;
+        return adMapper.adDTOToAdEntityWithoutId(adDTO);
     }
 
     public List<AdDTO> getAllAds() {
-        List<AdDTO> listAd = adsRepository.findAll().stream()
-                .map(e->mapper.adEntityToAdDTO(e)).collect(Collectors.toList());
-                return listAd;
+        List<AdEntity> adEntities = adsRepository.findAll();
+        return adEntities.stream()
+                .map(adMapper::adEntityToAdDTO)
+                .collect(Collectors.toList());
     }
 
-    //private Long id;
-    //private Long authorId;
-    //private String image;
-    //private Integer price;
-    //private String title;
-
-    public AdDTO addAd(CreateOrUpdateAd properties, MultipartFile image, Authentication authentication) throws IOException {
-
-        Long id = userRepository.findByEmail(authentication.getName()).getUserId();
-        AdEntity adEntity = AdEntity.builder()
-                .price(properties.getPrice())
-                .title(properties.getTitle())
-                .authorId(id)
-                .description(properties.getDescription())
-                .build();
-        adsRepository.save(adEntity);
-
-
-        Path filePath = Path.of("/image", adEntity + "." + getExtensions(image.getOriginalFilename()));
-        Files.createDirectories(filePath.getParent());
-        Files.deleteIfExists(filePath);
-        try (
-                InputStream is = image.getInputStream();
-                OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
-                BufferedInputStream bis = new BufferedInputStream(is, 1024);
-                BufferedOutputStream bos = new BufferedOutputStream(os, 1024);
-        ) {
-            bis.transferTo(bos);
-        }
-        ImageEntity imageEntity = imageRepository
-                .findById(adEntity.getImageEntity().getImageId()).orElse(new ImageEntity());
-        imageEntity.setFilePath(filePath.toString());
-        imageEntity.setFileSize(image.getSize());
-        imageEntity.setMediaType(image.getContentType());
-        imageEntity.setData(image.getBytes());
-        imageRepository.save(imageEntity);
-        adEntity.setImageEntity(imageEntity);
-
-
-        return mapper.adEntityToAdDTO(adEntity);
+    public AdDTO addAd(CreateOrUpdateAd properties, MultipartFile image) {
+        AdEntity adEntity = adMapper.createOrUpdateAdToAdEntity(properties);
+        // Сохранение изображения и установка пути к изображению в сущность
+        adEntity.setImage(image.getOriginalFilename());
+        AdEntity savedAd = adsRepository.save(adEntity);
+        return adMapper.adEntityToAdDTO(savedAd);
     }
-    private String getExtensions(String fileName) {
-        String extentions = fileName.substring(fileName.lastIndexOf(".") + 1);
-        return extentions;
-    }
-
-
 
     public List<CommentEntity> getCommentsForAd(int id) {
-        return null;
+        return commentRepository.findByAdId((long) id);
     }
 
     public CommentEntity addCommentToAd(int id, CreateOrUpdateComment comment) {
-        return null;
+        CommentEntity newComment = new CommentEntity();
+        newComment.setAdId((long) id);
+        newComment.setText(comment.getText());
+        return commentRepository.save(newComment); // Сохранение нового комментария
     }
 
     public ExtendedAd getAdById(int id) {
-        return null;
+        Optional<AdEntity> adEntityOptional = adsRepository.findById((long) id);
+        if (adEntityOptional.isPresent()) {
+            AdEntity adEntity = adEntityOptional.get();
+            return adMapper.adEntityToExtendedAd(adEntity); // Преобразование в ExtendedAd
+        } else {
+            throw new AdNotFoundException("Ad not found");
+        }
     }
 
     public void removeAd(int id) {
+        adsRepository.deleteById((long) id);
     }
 
     public AdDTO updateAd(int id, CreateOrUpdateAd ad) {
-        return null;
+        Optional<AdEntity> adEntityOptional = adsRepository.findById((long) id);
+        if (adEntityOptional.isPresent()) {
+            AdEntity adEntity = adEntityOptional.get();
+            adMapper.updateAdEntityFromDto(ad, adEntity);
+            AdEntity updatedAd = adsRepository.save(adEntity);
+            return adMapper.adEntityToAdDTO(updatedAd); // Преобразование и возврат обновленного объявления
+        } else {
+            throw new AdNotFoundException("Ad not found");
+        }
     }
 
     public void updateAdImage(int id, MultipartFile image) {
+        Optional<AdEntity> adEntityOptional = adsRepository.findById((long) id);
+        if (adEntityOptional.isPresent()) {
+            AdEntity adEntity = adEntityOptional.get();
+            adEntity.setImage(image.getOriginalFilename());
+            adsRepository.save(adEntity);
+        } else {
+            throw new AdNotFoundException("Ad not found");
+        }
     }
 
     public List<AdDTO> getAdsForLoggedInUser() {
         return null;
     }
 }
-
-
-

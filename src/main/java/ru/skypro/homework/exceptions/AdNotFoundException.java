@@ -1,6 +1,7 @@
 package ru.skypro.homework.exceptions;
 
-public class AdNotFoundException extends Throwable {
-    public AdNotFoundException(String s) {
+public class AdNotFoundException extends RuntimeException {
+    public AdNotFoundException(String message) {
+        super(message);
     }
 }

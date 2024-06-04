@@ -2,6 +2,10 @@ package ru.skypro.homework.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Entity
@@ -15,11 +19,18 @@ public class AdEntity {
     @GeneratedValue
     private Long id;
     private Long authorId;
-    @JoinColumn(name = "image_id")
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private ImageEntity imageEntity;
+    private String image;
     private Integer price;
     private String title;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "image_id")
+    private ImageEntity imageEntity;
+
     //убрал тк нигде не написано про это поле
     private String description;
 }
