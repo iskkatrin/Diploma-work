@@ -80,8 +80,9 @@ public class UserController {
             )
     })
     public ResponseEntity<UserDTO> getUser() {
-        UserDTO userDTO = new UserDTO();
-        return ResponseEntity.ok(userDTO);
+        // Здесь заглушка, тк пользователя не получаем(Лола поправить)
+        Long userId = 1L;
+        return ResponseEntity.ok(userService.findUserDTO(userId));
     }
 
     @PatchMapping("/me")

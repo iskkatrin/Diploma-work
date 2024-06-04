@@ -62,6 +62,10 @@ public class UserService {
         saveUser(userEntity);
         return updateUser;
     }
+
+    public UserDTO findUserDTO(Long userId) {
+        return getUserDTO(findUser(userId));
+    }
 }
 
 
