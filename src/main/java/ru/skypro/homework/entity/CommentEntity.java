@@ -16,7 +16,7 @@ import jakarta.persistence.*;
 
 public class CommentEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue  //(strategy = GenerationType.)
     private Long commentId;
     private Long adId;
     private Integer author;
@@ -31,7 +31,7 @@ public class CommentEntity {
     private UserEntity userEntity;
 
     @ManyToOne
-    @JoinColumn(name = "ad_id")
+    @JoinColumn(name = "adId")
     private AdEntity adEntity;
 
 }

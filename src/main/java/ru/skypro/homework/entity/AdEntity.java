@@ -1,6 +1,8 @@
 package ru.skypro.homework.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table
+@Builder
 public class AdEntity {
     @Id
     @GeneratedValue
@@ -28,5 +31,7 @@ public class AdEntity {
     @JoinColumn(name = "image_id")
     private ImageEntity imageEntity;
 
+    //убрал тк нигде не написано про это поле
+    private String description;
 }
 

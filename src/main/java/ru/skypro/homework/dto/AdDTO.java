@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AdDTO {
     private Integer author;
-    @Schema( type = "string", format = "binary")
+    //@Schema( type = "string", format = "binary")
     private String image;
     private Integer pk;
     private Integer price;
