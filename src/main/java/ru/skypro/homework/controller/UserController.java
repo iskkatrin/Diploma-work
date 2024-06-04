@@ -8,13 +8,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDTO;
-import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.exceptions.NotEditUserPasswordException;
 import ru.skypro.homework.exceptions.NotSaveAvatarEx;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
@@ -36,25 +37,25 @@ public class UserController {
         this.service = service;
     }
 
-    @GetMapping("/{id}")
-    public UserDTO getUser(@PathVariable Long id) {
-        UserEntity userEntity = null;
-        try {
-            userEntity = userService.getUserById(id);
-
-        } catch (Exception e) {
-            log.info("user is null");
-            return null;
-        }
-        UserDTO userDTO = userService.getUserDTO(userEntity);
-        return userDTO;
-    }
-
-    @PostMapping
-    public void createUser(@RequestBody UserDTO userDTO) {
-        UserEntity userEntity = userService.getUser(userDTO);
-        userService.saveUser(userEntity);
-    }
+//    @GetMapping("/{id}")
+//    public UserDTO getUser(@PathVariable Long id) {
+//        UserEntity userEntity = null;
+//        try {
+//            userEntity = userService.getUserById(id);
+//
+//        } catch (Exception e) {
+//            log.info("user is null");
+//            return null;
+//        }
+//        UserDTO userDTO = userService.getUserDTO(userEntity);
+//        return userDTO;
+//    }
+//
+//    @PostMapping
+//    public void createUser(@RequestBody UserDTO userDTO) {
+//        UserEntity userEntity = userService.getUser(userDTO);
+//        userService.saveUser(userEntity);
+//    }
 
     @PostMapping("/set_password")
     @Operation(summary = "Обновление пароля")
@@ -64,25 +65,40 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Forbidden")
     })
     public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword) {
-        return ResponseEntity.ok().build();
+        try {
+            // Здесь заглушка, тк пользователя не получаем(Лола поправить)
+            Long userId = 1L;
+            userService.updatePassword(userId, newPassword);
+            return ResponseEntity.ok().build();
+        } catch (NotEditUserPasswordException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
 
     @GetMapping("/me")
     @Operation(summary = "Получение информации об авторизованном пользователе")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "OK",
-                    content = @Content(schema = @Schema(implementation = UserEntity.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "OK",
+                    content = @Content(schema = @Schema(implementation = UserDTO.class))
+            ),
+            @ApiResponse(responseCode = "401",
+                    description = "Unauthorized"
+            )
     })
-    public ResponseEntity<UserEntity> getUser() {
-        UserEntity userEntity = new UserEntity();
-        return ResponseEntity.ok(userEntity);
+    public ResponseEntity<UserDTO> getUser() {
+        // Здесь заглушка, тк пользователя не получаем(Лола поправить)
+        Long userId = 1L;
+        return ResponseEntity.ok(userService.findUserDTO(userId));
     }
 
     @PatchMapping("/me")
     @Operation(summary = "Обновление информации об авторизованном пользователе")
     public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser) {
-        return ResponseEntity.ok(updateUser);
+        //заглушка тк не знаем какой пользователь(Лола поправить)
+        Long userId = 1L;
+        return ResponseEntity.ok(userService.updateUser(userId, updateUser));
     }
 
     @PatchMapping("/me/image")
@@ -92,8 +108,8 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     public ResponseEntity<?> updateUserImage(@RequestParam("image") MultipartFile image) {
+        //заглушка тк не получаем пользователя(Лола исправить)
         Long userId = 1L;
-
         try {
             service.uploadImage(userId, image);
         } catch (NotSaveAvatarEx e) {
