@@ -19,8 +19,7 @@ public class AdEntity {
     private String image;
     private Integer price;
     private String title;
-    //убрал тк нигде не написано про это поле
-//    private String description;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;

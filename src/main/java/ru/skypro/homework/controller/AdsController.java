@@ -49,18 +49,6 @@ public class AdsController {
         return new ResponseEntity<>(ad, HttpStatus.CREATED);
     }
 
-//    @GetMapping("/{id}/comments")
-//    public ResponseEntity<List<CommentEntity>> getComments(@PathVariable int id) {
-//        List<CommentEntity> commentEntities = adsService.getCommentsForAd(id);
-//        return ResponseEntity.ok(commentEntities);
-//    }
-
-//    @PostMapping("/{id}/comments")
-//    public ResponseEntity<CommentEntity> addComment(@PathVariable int id, @RequestBody CreateOrUpdateComment comment) {
-//        CommentEntity newCommentEntity = adsService.addCommentToAd(id, comment);
-//        return ResponseEntity.ok(newCommentEntity);
-//    }
-
     @GetMapping("/{id}")
     @Operation(summary = "Получение информации об объявлении")
     @ApiResponses({
@@ -92,11 +80,11 @@ public class AdsController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(schema = @Schema(implementation = AdDTO.class))),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized"),
-                    @ApiResponse(responseCode = "403", description = "Forbidden"),
-                    @ApiResponse(responseCode = "404", description = "Not found")
-                    })
-            public ResponseEntity<AdDTO>updateAd(@PathVariable int id, @RequestBody CreateOrUpdateAd ad) {
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not found")
+    })
+    public ResponseEntity<AdDTO> updateAd(@PathVariable int id, @RequestBody CreateOrUpdateAd ad) {
         AdDTO updatedAd = adsService.updateAd(id, ad);
         return ResponseEntity.ok(updatedAd);
     }

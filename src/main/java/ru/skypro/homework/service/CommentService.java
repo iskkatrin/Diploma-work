@@ -34,7 +34,7 @@ public class CommentService {
     public CommentsDTO getComments(Integer adId) {
         CommentsDTO comments = new CommentsDTO();
         List<CommentDTO> result = new ArrayList<>();
-        List<CommentEntity> allByAdId = commentRepository.findByAdId(adId.longValue()); // явное преобразование Integer в long
+        List<CommentEntity> allByAdId = commentRepository.findByAdId(adId.longValue()); //  преобразование Integer в long
 
         for (CommentEntity commentEntity : allByAdId) {
             result.add(commentMapper.commentEntityToCommentDTO(commentEntity));
@@ -57,7 +57,6 @@ public class CommentService {
         return commentMapper.commentEntityToCommentDTO(commentRepository.save(existingComment));
 
     }
-
 }
 
 

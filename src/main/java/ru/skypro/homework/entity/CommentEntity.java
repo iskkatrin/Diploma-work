@@ -18,10 +18,6 @@ public class CommentEntity {
     @Id
     @GeneratedValue
     private Long commentId;
-//    @ManyToOne
-//    @JoinColumn(name = "ad_item_id")
-//    private Ad ad;   не увидел такого в условиях и изза этого ошибка вылезает
-
     private Long adId;
     private Integer author;
     private String authorImage;

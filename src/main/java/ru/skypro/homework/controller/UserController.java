@@ -64,7 +64,6 @@ public class UserController {
             @ApiResponse(responseCode = "403", description = "Forbidden")
     })
     public ResponseEntity<Void> setPassword(@RequestBody NewPassword newPassword) {
-        // Logic for updating password
         return ResponseEntity.ok().build();
     }
 
@@ -73,18 +72,16 @@ public class UserController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(schema = @Schema(implementation = UserEntity.class))),
-                    @ApiResponse(responseCode = "401", description = "Unauthorized")
-                    })
-            public ResponseEntity<UserEntity>getUser(){
-            // Logic for fetching user info
-            UserEntity userEntity =new UserEntity();
-            return ResponseEntity.ok(userEntity);
-            }
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    public ResponseEntity<UserEntity> getUser() {
+        UserEntity userEntity = new UserEntity();
+        return ResponseEntity.ok(userEntity);
+    }
 
-            @PatchMapping("/me")
-            @Operation(summary = "Обновление информации об авторизованном пользователе")
-            public ResponseEntity<UpdateUser>updateUser(@RequestBody UpdateUser updateUser) {
-        // Logic for updating user info
+    @PatchMapping("/me")
+    @Operation(summary = "Обновление информации об авторизованном пользователе")
+    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser) {
         return ResponseEntity.ok(updateUser);
     }
 
@@ -95,8 +92,6 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     public ResponseEntity<?> updateUserImage(@RequestParam("image") MultipartFile image) {
-        // Logic for updating user image
-        // from S security we get user id
         Long userId = 1L;
 
         try {

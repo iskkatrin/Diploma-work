@@ -10,12 +10,10 @@ import ru.skypro.homework.dto.Register;
 
 @Service
 public class AuthService {
-//    private final AuthRepository authRepository;
     private final UserDetailsManager manager;
     private final PasswordEncoder encoder;
 
     public AuthService(UserDetailsManager manager, PasswordEncoder encoder) {
-//        this.authRepository = authRepository;
         this.manager = manager;
         this.encoder = encoder;
     }
@@ -43,6 +41,5 @@ public class AuthService {
                         .build());
         return true;
     }
-
 }
 

@@ -47,7 +47,6 @@ public class AdMapper {
         extendedAd.setTitle(adEntity.getTitle());
         return extendedAd;
     }
-
 }
 
 
