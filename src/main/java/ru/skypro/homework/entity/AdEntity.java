@@ -1,9 +1,6 @@
 package ru.skypro.homework.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,5 +21,13 @@ public class AdEntity {
     private String title;
     //убрал тк нигде не написано про это поле
 //    private String description;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "image_id")
+    private ImageEntity imageEntity;
+
 }
 

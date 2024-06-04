@@ -29,5 +29,14 @@ public class CommentEntity {
     private Integer createdAt;
     private Integer pk;
     private String text;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "ad_id")
+    private AdEntity adEntity;
+
 }
 
