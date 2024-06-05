@@ -1,12 +1,11 @@
 package ru.skypro.homework.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.entity.CommentEntity;
-import ru.skypro.homework.entity.CommentEntity;
+import ru.skypro.homework.exceptions.CommentNotFoundException;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.CommentRepository;
 
@@ -18,35 +17,44 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
 
-@Autowired
     public CommentService(CommentRepository commentRepository, CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
     }
 
-    public CommentEntity addComment(int adId, CreateOrUpdateComment comment) {
-        return null;
+    public CommentDTO addComment(long adId, CreateOrUpdateComment comment) {
+        CommentEntity newComment = new CommentEntity();
+        newComment.setAdId(adId);
+        newComment.setText(comment.getText());
+
+        CommentEntity savedComment = commentRepository.save(newComment);
+        return commentMapper.commentEntityToCommentDTO(savedComment);
     }
 
-    public CommentsDTO getComments(Integer adId) {
+    public CommentsDTO getComments(long adId) {
         CommentsDTO comments = new CommentsDTO();
         List<CommentDTO> result = new ArrayList<>();
-        List<CommentEntity> allByAdId = commentRepository.findByAdId(adId.longValue());
+        List<CommentEntity> allByAdId = commentRepository.findByAdId(adId);
 
         for (CommentEntity commentEntity : allByAdId) {
             result.add(commentMapper.commentEntityToCommentDTO(commentEntity));
         }
         comments.setResults(result);
         comments.setCount(result.size());
-
         return comments;
     }
 
-    public void deleteComment(int adId, int commentId) {
+
+    public void deleteComment(long adId, long commentId) {
+        commentRepository.deleteByCommentIdAndAdId(adId, commentId);
     }
 
-    public CommentEntity updateComment(int adId, int commentId, CreateOrUpdateComment comment) {
-        return null;
+    public CommentDTO updateComment(long adId, long commentId, CreateOrUpdateComment comment) {
+        CommentEntity existingComment = commentRepository.findByCommentIdAndAdId(commentId, adId)
+                .orElseThrow(() -> new CommentNotFoundException("Comment not found with adId: " + adId + " and commentId: " + commentId));
+        existingComment.setText(comment.getText());
+        return commentMapper.commentEntityToCommentDTO(commentRepository.save(existingComment));
+
     }
 }
 

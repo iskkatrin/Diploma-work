@@ -23,5 +23,4 @@ public class UserEntity {
     private String role;
     private String username;
     private String password;
-    //нужно добавить связь с image
 }

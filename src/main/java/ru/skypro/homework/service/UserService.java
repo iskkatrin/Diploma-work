@@ -4,8 +4,11 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ru.skypro.homework.dto.NewPassword;
+import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.entity.UserEntity;
+import ru.skypro.homework.exceptions.NotEditUserPasswordException;
 import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
@@ -49,6 +52,34 @@ public class UserService {
 
     public UserEntity findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public UpdateUser updateUser(Long userId, UpdateUser updateUser) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        if (updateUser.getFirstName() != null) {
+            userEntity.setFirstName(updateUser.getFirstName());
+        }
+        if (updateUser.getLastName() != null) {
+            userEntity.setLastName(updateUser.getLastName());
+        }
+        if (updateUser.getPhone() != null) {
+            userEntity.setPhone(updateUser.getPhone());
+        }
+        saveUser(userEntity);
+        return updateUser;
+    }
+
+    public UserDTO findUserDTO(Long userId) {
+        return getUserDTO(findUser(userId));
+    }
+
+    public void updatePassword(Long userId, NewPassword newPassword) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        if (userEntity.getPassword().equals(newPassword.getCurrentPassword())) {
+            userEntity.setPassword(newPassword.getNewPassword());
+        } else {
+            throw new NotEditUserPasswordException("not edited password");
+        }
     }
 }
 

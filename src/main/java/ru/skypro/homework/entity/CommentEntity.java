@@ -16,12 +16,8 @@ import jakarta.persistence.*;
 
 public class CommentEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue  //(strategy = GenerationType.)
     private Long commentId;
-//    @ManyToOne
-//    @JoinColumn(name = "ad_item_id")
-//    private Ad ad;   не увидел такого в условиях и изза этого ошибка вылезает
-
     private Long adId;
     private Integer author;
     private String authorImage;
@@ -29,5 +25,14 @@ public class CommentEntity {
     private Integer createdAt;
     private Integer pk;
     private String text;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "adId")
+    private AdEntity adEntity;
+
 }
 
