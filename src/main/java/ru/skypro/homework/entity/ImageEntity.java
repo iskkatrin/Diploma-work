@@ -19,4 +19,7 @@ public class ImageEntity {
     private String mediaType;
     @Lob
     private byte[] data;
+
+    @OneToOne(mappedBy = "imageEntity")
+    private AdEntity adEntity;
 }

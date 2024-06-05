@@ -19,7 +19,7 @@ public class AdMapper {
 
     public AdDTO adEntityToAdDTO(AdEntity adEntity) {
         AdDTO adDTO = mapper.getMapper().map(adEntity, AdDTO.class);
-        adDTO.setAuthor(adEntity.getAuthorId().intValue());
+        adDTO.setAuthor(adEntity.getUserEntity().getUserId().intValue());
         adDTO.setPk(adEntity.getId().intValue());
         return adDTO;
     }

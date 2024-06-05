@@ -114,6 +114,6 @@ public class AdsService {
     public boolean isAuthorAd(String username, Long adId) {
 
         AdEntity adEntity = adsRepository.findById(adId).orElseThrow(RuntimeException::new);
-        return adEntity.getAuthor().getUsername().equals(username);
+        return adEntity.getUserEntity().getUsername().equals(username);
     }
 }
