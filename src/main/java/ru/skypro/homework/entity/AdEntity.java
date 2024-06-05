@@ -1,9 +1,7 @@
 package ru.skypro.homework.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +16,11 @@ public class AdEntity {
     @Id
     @GeneratedValue
     private Long id;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "author_id", nullable = false)
     private Long authorId;
+    private UserEntity author;
     private String image;
     private Integer price;
     private String title;

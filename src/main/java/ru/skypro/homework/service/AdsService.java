@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDTO;
@@ -12,7 +13,7 @@ import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.repository.AdsRepository;
 
 import java.util.List;
-
+@Slf4j
 @Service
 public class AdsService {
     private final AdsRepository adsRepository;
@@ -64,6 +65,13 @@ public class AdsService {
 
     public List<AdDTO> getAdsForLoggedInUser() {
         return null;
+    }
+
+
+    public boolean isAuthorAd(String username, Long adId) {
+
+        AdEntity adEntity = adsRepository.findById(adId).orElseThrow(RuntimeException::new);
+        return adEntity.getAuthor().getUsername().equals(username);
     }
 }
 

@@ -2,19 +2,30 @@ package ru.skypro.homework.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import ru.skypro.homework.dto.Role;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+@EnableWebSecurity
 @Configuration
 public class WebSecurityConfig {
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
@@ -22,40 +33,54 @@ public class WebSecurityConfig {
             "/v3/api-docs",
             "/webjars/**",
             "/login",
-            "/register"
+            "/register",
+            "/ads",
+            "/image"
     };
 
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user =
-                User.builder()
-                        .username("user@gmail.com")
-                        .password("password")
-                        .passwordEncoder(passwordEncoder::encode)
-                        .roles(Role.USER.name())
-                        .build();
-        return new InMemoryUserDetailsManager(user);
+    public WebSecurityConfig(CustomAccessDeniedHandler customAccessDeniedHandler) {
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
     }
-//
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.csrf()
-//                .disable()
-//                .authorizeHttpRequests(
-//                        authorization ->
-//                                authorization
-//                                        .mvcMatchers(AUTH_WHITELIST)
-//                                        .permitAll()
-//                                        .mvcMatchers("/ads/**", "/users/**")
-//                                        .authenticated())
-//                .cors()
-//                .and()
-//                .httpBasic(withDefaults());
-//        return http.build();
-//    }
+
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.cors((cors) -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(
+                        authorization ->
+                                authorization
+                                        .requestMatchers(AUTH_WHITELIST)
+                                        .permitAll()
+                                        .requestMatchers("/ads/", "/users/", "/image/**")
+                                        .authenticated())
+                .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer
+                        .loginPage("/login")
+                        .permitAll())
+                .exceptionHandling(e-> e.accessDeniedHandler(customAccessDeniedHandler)
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+                .httpBasic(withDefaults());
+        return http.build();
+    }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedOrigins(List.of("http://localhost.3000"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }
