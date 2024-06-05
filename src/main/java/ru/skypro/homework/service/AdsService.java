@@ -58,13 +58,19 @@ public class AdsService {
         return adMapper.adEntityToAdDTO(savedAd);
     }
 
-    public List<CommentEntity> getCommentsForAd(int id) {
-        return commentRepository.findByAdId((long) id);
-    }
+//    public List<CommentEntity> getCommentsForAd(int id) {
+//        return commentRepository.findByAdId((long) id);
+//    }
 
-    public CommentEntity addCommentToAd(int id, CreateOrUpdateComment comment) {
+    public CommentEntity addCommentToAd(Integer id, CreateOrUpdateComment comment) {
         CommentEntity newComment = new CommentEntity();
-        newComment.setAdId((long) id);
+        AdEntity byId;
+        try {
+            byId = findById(id.longValue());
+        } catch (Exception e) {
+            throw new RuntimeException("не найдено объявление по его id");
+        }
+        newComment.setAdEntity(byId);
         newComment.setText(comment.getText());
         return commentRepository.save(newComment); // Сохранение нового комментария
     }
@@ -115,5 +121,9 @@ public class AdsService {
 
         AdEntity adEntity = adsRepository.findById(adId).orElseThrow(RuntimeException::new);
         return adEntity.getUserEntity().getUsername().equals(username);
+    }
+
+    public AdEntity findById(Long id) {
+        return adsRepository.findById(id).get();
     }
 }

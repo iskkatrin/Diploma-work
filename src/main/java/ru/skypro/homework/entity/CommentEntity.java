@@ -17,7 +17,6 @@ public class CommentEntity {
     @Id
     @GeneratedValue  //(strategy = GenerationType.)
     private Long commentId;
-    private Long adId;
     private Integer author;
     private String authorImage;
     private String authorFirstName;

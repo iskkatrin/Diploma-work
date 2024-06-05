@@ -24,7 +24,7 @@ public class CommentMapper {
     public CommentEntity commentDTOToCommentEntityWithoutId(CommentDTO commentDTO) {
         CommentEntity commentEntity = mapper.getMapper().map(commentDTO, CommentEntity.class);
         //не знаю откуда брать ad id
-        commentEntity.setAdId(-1L);
+        commentEntity.setAdEntity(null);
         return commentEntity;
     }
 

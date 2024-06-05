@@ -9,11 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository <CommentEntity, Long> {
-    List<CommentEntity> findByAdId(long adId);
-
-    Optional<CommentEntity> findByCommentIdAndAdId(long commentId, long adId);
-
-    List<CommentEntity> findAllByAdId(Long adId);
-
-    void deleteByCommentIdAndAdId(long commentId, long adId);
 }
