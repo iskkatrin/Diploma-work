@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
@@ -37,6 +38,7 @@ public class CommentController {
     }
 
     @PostMapping
+    @PreAuthorize(value = "hasRole('ADMIN') or @adsService.isAuthorAd(authentication.getName(), #adId)")
     @Operation(summary = "Добавление комментария к объявлению")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
@@ -50,6 +52,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
+    @PreAuthorize(value = "hasRole('ADMIN') or @adsService.isAuthorAd(authentication.getName(), #adId)")
     @Operation(summary = "Удаление комментария")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -63,6 +66,7 @@ public class CommentController {
     }
 
     @PatchMapping("/{commentId}")
+    @PreAuthorize(value = "hasRole('ADMIN') or @adsService.isAuthorAd(authentication.getName(), #adId)")
     @Operation(summary = "Обновление комментария")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",

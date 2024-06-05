@@ -9,10 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.service.AdsService;
 
 
@@ -75,6 +75,8 @@ public class AdsController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize(value = "hasRole('ADMIN') or @adsService.isAuthorAd(authentication.getName(), #adId)")
+
     @Operation(summary = "Удаление объявления")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "No Content"),
@@ -88,6 +90,7 @@ public class AdsController {
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize(value = "hasRole('ADMIN') or @adsService.isAuthorAd(authentication.getName(), #adId)")
     @Operation(summary = "Обновление информации об объявлении")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
@@ -102,6 +105,7 @@ public class AdsController {
     }
 
     @PatchMapping("/{id}/image")
+    @PreAuthorize(value = "hasRole('ADMIN') or @adsService.isAuthorAd(authentication.getName(), #adId)")
     @Operation(summary = "Обновление картинки объявления")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
