@@ -2,9 +2,12 @@ package ru.skypro.homework.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 
 @Entity
@@ -34,7 +37,9 @@ public class AdEntity {
     @JoinColumn(name = "image_id")
     private ImageEntity imageEntity;
 
-    //убрал тк нигде не написано про это поле
+    @OneToMany(mappedBy = "adEntity")
+    private List<CommentEntity> commentEntity;
+
     private String description;
 }
 
