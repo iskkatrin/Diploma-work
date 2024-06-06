@@ -20,7 +20,7 @@ import ru.skypro.homework.service.AuthService;
 public class AuthController {
 
     @Autowired
-    private final AuthService authService;
+    private AuthService authService;
 
 
     @PostMapping("/login")

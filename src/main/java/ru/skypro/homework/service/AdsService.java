@@ -1,6 +1,7 @@
 package ru.skypro.homework.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,14 +26,18 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 public class AdsService {
-    private final AdsRepository adsRepository;
-    private final AdMapper adMapper;
-    private final CommentRepository commentRepository;
 
-    public AdsService(AdsRepository adsRepository, AdMapper adMapper, CommentRepository commentRepository) {
-        this.adsRepository = adsRepository;
+    @Autowired
+    private AdsRepository adsRepository;
+    @Autowired
+    private  CommentRepository commentRepository;
+
+    private final AdMapper adMapper;
+
+
+    public AdsService(AdMapper adMapper) {
+
         this.adMapper = adMapper;
-        this.commentRepository = commentRepository;
     }
 
     public AdDTO getAdDTO(AdEntity adEntity) {
@@ -117,10 +122,10 @@ public class AdsService {
     }
 
 
-    public boolean isAuthorAd(String username, Long adId) {
+    public boolean isAuthorAd(String email, Long adId) {
 
         AdEntity adEntity = adsRepository.findById(adId).orElseThrow(RuntimeException::new);
-        return adEntity.getUserEntity().getUsername().equals(username);
+        return adEntity.getUserEntity().getEmail().equals(email);
     }
 
     public AdEntity findById(Long id) {

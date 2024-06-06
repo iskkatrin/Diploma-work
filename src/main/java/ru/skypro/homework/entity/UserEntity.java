@@ -23,7 +23,7 @@ public class UserEntity {
     private String lastName;
     private String phone;
     private String role;
-    private String username;
+    //private String username;
     private String password;
 
     @OneToMany(mappedBy = "userEntity")

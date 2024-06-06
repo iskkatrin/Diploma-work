@@ -50,8 +50,8 @@ public class UserService {
         userRepository.save(userEntity);
     }
 
-    public UserEntity findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public UserEntity findByUsername(String email) {
+        return userRepository.findByEmail(email);
     }
 
     public UpdateUser updateUser(Long userId, UpdateUser updateUser) {
