@@ -95,7 +95,7 @@ public class AdsController {
         return ResponseEntity.ok(updatedAd);
     }
 
-    @PatchMapping("/{id}/image")
+    @PatchMapping("/{userId}/image")
     @PreAuthorize(value = "hasRole('ADMIN') or @adsService.isAuthorAd(authentication.getEmail(), #adId)")
     @Operation(summary = "Обновление картинки объявления")
     @ApiResponses({
@@ -104,8 +104,8 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<Void> updateImage(@PathVariable int id, @RequestParam("image") MultipartFile image) {
-        adsService.updateAdImage(id, image);
+    public ResponseEntity<Void> updateImage(@PathVariable int adId, @RequestParam("image") MultipartFile image) {
+        adsService.updateAdImage(adId, image);
         return ResponseEntity.ok().build();
     }
 

@@ -1,6 +1,7 @@
 package ru.skypro.homework.service;
 
-import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -13,24 +14,26 @@ import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 //import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.exceptions.AdNotFoundException;
+import ru.skypro.homework.exceptions.NotSaveImageEx;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Collectors;
-
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 public class AdsService {
 
+    private static final Logger log = LoggerFactory.getLogger(AdsService.class);
     @Autowired
     private AdsRepository adsRepository;
     @Autowired
-    private  CommentRepository commentRepository;
+    private CommentRepository commentRepository;
+    @Autowired
+    private ImageService imageService;
 
     private final AdMapper adMapper;
 
@@ -106,12 +109,17 @@ public class AdsService {
         }
     }
 
-    public void updateAdImage(int id, MultipartFile image) {
-        Optional<AdEntity> adEntityOptional = adsRepository.findById((long) id);
+    public void updateAdImage(Integer adId, MultipartFile image) {
+        Optional<AdEntity> adEntityOptional = adsRepository.findById(adId.longValue());
         if (adEntityOptional.isPresent()) {
             AdEntity adEntity = adEntityOptional.get();
-            adEntity.setImage(image.getOriginalFilename());
-            adsRepository.save(adEntity);
+            try {
+                adsRepository.save(imageService.uploadAdImage(adEntity, image));
+            } catch (NotSaveImageEx e) {
+                log.warn("NotSaveImageEx in updateAdImage");
+            } catch (IOException e) {
+                log.warn("ioException in updateAdImage");
+            }
         } else {
             throw new AdNotFoundException("Ad not found");
         }

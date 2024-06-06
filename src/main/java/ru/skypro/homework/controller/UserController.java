@@ -16,25 +16,22 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDTO;
 import ru.skypro.homework.exceptions.NotEditUserPasswordException;
-import ru.skypro.homework.exceptions.NotSaveAvatarEx;
 import ru.skypro.homework.service.ImageService;
 import ru.skypro.homework.service.UserService;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
-    private final ImageService service;
+    private final ImageService imageService;
 
     @Autowired
     private UserService userService;
 
     @Autowired
-    public UserController(ImageService service) {
-        this.service = service;
+    public UserController(ImageService imageService) {
+        this.imageService = imageService;
     }
 
     @PostMapping("/set_password")
@@ -90,15 +87,8 @@ public class UserController {
     public ResponseEntity<Void> updateUserImage(@RequestParam("image") MultipartFile image) {
         //заглушка тк не получаем пользователя(Лола исправить)
         Long userId = 1L;
-        try {
-            service.uploadImage(userId, image);
-        } catch (NotSaveAvatarEx e) {
-            log.warn("NotSaveAvatarException in save image");
-            return ResponseEntity.badRequest().build();
-        } catch (IOException e) {
-            log.warn("IOException in save image");
-            return ResponseEntity.badRequest().build();
-        }
+
+        userService.uploadImage(userId, image);
         return ResponseEntity.ok().build();
     }
 }
