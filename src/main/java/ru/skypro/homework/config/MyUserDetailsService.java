@@ -3,27 +3,58 @@ package ru.skypro.homework.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.entity.UserEntity;
-import ru.skypro.homework.service.UserService;
+import ru.skypro.homework.repository.UserRepository;
+
 
 
 @Service
 @RequiredArgsConstructor
-public class MyUserDetailsService implements UserDetailsService {
+public class MyUserDetailsService implements UserDetailsManager {
 
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
+
 
 
     @Override
-    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        final UserEntity user = userService.findByUsername(username);
+    public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
+        final UserEntity user = userRepository.findByEmail(email);
         if (user== null){
-            throw new UsernameNotFoundException(username);
+            throw new UsernameNotFoundException(email);
         }
         return new MyUserPrincipal (user);
+    }
+
+    @Override
+    public void createUser(UserDetails user) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail(user.getUsername());
+        userEntity.setPassword(user.getPassword());
+        userRepository.save(userEntity);
+
+    }
+
+    @Override
+    public void updateUser(UserDetails user) {
+
+    }
+
+    @Override
+    public void deleteUser(String username) {
+
+    }
+
+    @Override
+    public void changePassword(String oldPassword, String newPassword) {
+
+    }
+
+    @Override
+    public boolean userExists(String username) {
+        return userRepository.findByEmail(username) != null;
     }
 }

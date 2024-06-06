@@ -66,7 +66,7 @@ public class AdsController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize(value = "hasRole('ADMIN') or @adsService.isAuthorAd(authentication.getName(), #adId)")
+    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(principal.username, #adId)")
 
     @Operation(summary = "Удаление объявления")
     @ApiResponses({
@@ -81,7 +81,7 @@ public class AdsController {
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize(value = "hasRole('ADMIN') or @adsService.isAuthorAd(authentication.getName(), #adId)")
+    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(principal.username, #adId)")
     @Operation(summary = "Обновление информации об объявлении")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
@@ -96,7 +96,7 @@ public class AdsController {
     }
 
     @PatchMapping("/{id}/image")
-    @PreAuthorize(value = "hasRole('ADMIN') or @adsService.isAuthorAd(authentication.getName(), #adId)")
+    @PreAuthorize(value = "hasRole('ADMIN') or @adsService.isAuthorAd(authentication.getEmail(), #adId)")
     @Operation(summary = "Обновление картинки объявления")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
