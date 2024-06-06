@@ -17,6 +17,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
+import java.util.Optional;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -40,7 +41,7 @@ public class ImageService {
 
 
     public void uploadImage(Long userId, MultipartFile image) throws IOException {
-        UserEntity userEntity = userService.getUserById(userId); //поиск нужного студента
+        UserEntity userEntity = userService.getUserById(userId);
 
         Path filePath;
         try {
@@ -51,7 +52,6 @@ public class ImageService {
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
 
-        //работа с потоками
         try (
                 InputStream is = image.getInputStream();
                 OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
@@ -75,11 +75,17 @@ public class ImageService {
         newImageEntity.setMediaType(image.getContentType());
         newImageEntity.setFileSize(image.getSize());
 
-//        user.setAvatar(newImage);
-        //добавить студенту его аву
-//        userService.update(user);
         imageRepository.save(newImageEntity);
+        userEntity.setImageEntity(newImageEntity);
+        userService.saveUser(userEntity);
+    }
 
+    public ImageEntity findById(Long id) {
+        Optional<ImageEntity> optionalImage = imageRepository.findById(id);
+        if (optionalImage.isPresent()) {
+            return optionalImage.get();
+        }
+        throw new RuntimeException("not found image by it id");
     }
 
 

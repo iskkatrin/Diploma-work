@@ -31,4 +31,8 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "userEntity")
     private List<AdEntity> adEntity;
+
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private ImageEntity imageEntity;
 }

@@ -19,7 +19,7 @@ public class UserMapper {
     public UserDTO userEntityToUserDTO(UserEntity userEntity) {
         UserDTO userDTO = mapper.getMapper().map(userEntity, UserDTO.class);
         userDTO.setId(userEntity.getUserId().intValue());
-        userDTO.setImage("нужно подправить маппер пока нет реализации с image");
+        userDTO.setImage("/image/me/" + userEntity.getImageEntity().getImageId());
         return userDTO;
     }
 

@@ -22,4 +22,7 @@ public class ImageEntity {
 
     @OneToOne(mappedBy = "imageEntity")
     private AdEntity adEntity;
+
+    @OneToOne(mappedBy = "imageEntity")
+    private UserEntity userEntity;
 }

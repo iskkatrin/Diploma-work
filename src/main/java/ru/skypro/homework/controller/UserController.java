@@ -37,26 +37,6 @@ public class UserController {
         this.service = service;
     }
 
-//    @GetMapping("/{id}")
-//    public UserDTO getUser(@PathVariable Long id) {
-//        UserEntity userEntity = null;
-//        try {
-//            userEntity = userService.getUserById(id);
-//
-//        } catch (Exception e) {
-//            log.info("user is null");
-//            return null;
-//        }
-//        UserDTO userDTO = userService.getUserDTO(userEntity);
-//        return userDTO;
-//    }
-//
-//    @PostMapping
-//    public void createUser(@RequestBody UserDTO userDTO) {
-//        UserEntity userEntity = userService.getUser(userDTO);
-//        userService.saveUser(userEntity);
-//    }
-
     @PostMapping("/set_password")
     @Operation(summary = "Обновление пароля")
     @ApiResponses({
@@ -107,7 +87,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    public ResponseEntity<?> updateUserImage(@RequestParam("image") MultipartFile image) {
+    public ResponseEntity<Void> updateUserImage(@RequestParam("image") MultipartFile image) {
         //заглушка тк не получаем пользователя(Лола исправить)
         Long userId = 1L;
         try {
