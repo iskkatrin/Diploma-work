@@ -95,8 +95,8 @@ public class AdsController {
         return ResponseEntity.ok(updatedAd);
     }
 
-    @PatchMapping("/{userId}/image")
-    @PreAuthorize(value = "hasRole('ADMIN') or @adsService.isAuthorAd(authentication.getEmail(), #adId)")
+    @PatchMapping("/{id}/image")
+    @PreAuthorize(value = "hasRole('ADMIN') or @adsService.isAuthorAd(principal.getEmail(), #adId)")
     @Operation(summary = "Обновление картинки объявления")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
