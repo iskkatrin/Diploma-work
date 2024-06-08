@@ -37,9 +37,7 @@ public class AdsService {
 
     private final AdMapper adMapper;
 
-
     public AdsService(AdMapper adMapper) {
-
         this.adMapper = adMapper;
     }
 
@@ -65,10 +63,6 @@ public class AdsService {
         AdEntity savedAd = adsRepository.save(adEntity);
         return adMapper.adEntityToAdDTO(savedAd);
     }
-
-//    public List<CommentEntity> getCommentsForAd(int id) {
-//        return commentRepository.findByAdId((long) id);
-//    }
 
     public CommentEntity addCommentToAd(Integer id, CreateOrUpdateComment comment) {
         CommentEntity newComment = new CommentEntity();
@@ -128,7 +122,6 @@ public class AdsService {
     public List<AdDTO> getAdsForLoggedInUser() {
         return null;
     }
-
 
     public boolean isAuthorAd(String email, Long adId) {
 

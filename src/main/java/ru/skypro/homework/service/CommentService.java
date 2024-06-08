@@ -30,6 +30,7 @@ public class CommentService {
         this.adsService = adsService;
     }
 
+    //Добавляет новый комментарий к объявлению.
     public CommentDTO addComment(long adId, CreateOrUpdateComment comment) {
         log.info("Добавление нового комментария к объявлению с id: {}", adId);
         try {
@@ -47,6 +48,7 @@ public class CommentService {
         }
     }
 
+    // Возвращает список комментариев к объявлению.
     public CommentsDTO getComments(long adId) {
         log.info("Получение комментариев к объявлению с id: {}", adId);
         try {
@@ -68,6 +70,7 @@ public class CommentService {
         }
     }
 
+    // Удаляет комментарий к объявлению.
     public void deleteComment(long adId, long commentId) {
         log.info("Удаление комментария с id: {} из объявления с id: {}", commentId, adId);
         try {
@@ -88,6 +91,7 @@ public class CommentService {
         }
     }
 
+    // Обновляет комментарий у объявления.
     public CommentDTO updateComment(long adId, long commentId, CreateOrUpdateComment comment) {
         log.info("Обновление комментария с id: {} в объявлении с id: {}", commentId, adId);
         try {
