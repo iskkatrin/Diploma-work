@@ -13,6 +13,8 @@ import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 public class UserService {
@@ -50,7 +52,7 @@ public class UserService {
         userRepository.save(userEntity);
     }
 
-    public UserEntity findByUsername(String email) {
+    public Optional<UserEntity> findByUsername(String email) {
         return userRepository.findByEmail(email);
     }
 
