@@ -1,5 +1,6 @@
 package ru.skypro.homework.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,13 +8,15 @@ import ru.skypro.homework.entity.UserEntity;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public class MyUserPrincipal implements UserDetails {
+
     private final UserEntity user;
 
-    public MyUserPrincipal(UserEntity user) {
-        this.user = user;
-}
+    public MyUserPrincipal(Optional<UserEntity> user) {
+        this.user = user.orElseThrow(() -> new IllegalArgumentException("UserEntity is required"));
+    }
 
 
     @Override
@@ -30,7 +33,6 @@ public class MyUserPrincipal implements UserDetails {
     public String getUsername() {
         return user.getEmail();
     }
-    // поменять на почту
 
     @Override
     public boolean isAccountNonExpired() {

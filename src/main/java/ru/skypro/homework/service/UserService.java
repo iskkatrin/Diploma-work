@@ -17,6 +17,8 @@ import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 
+import java.util.Optional;
+
 import java.io.IOException;
 
 @Service
@@ -59,7 +61,7 @@ public class UserService {
         userRepository.save(userEntity);
     }
 
-    public UserEntity findByUsername(String email) {
+    public Optional<UserEntity> findByUsername(String email) {
         return userRepository.findByEmail(email);
     }
 
