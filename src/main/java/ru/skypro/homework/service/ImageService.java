@@ -84,6 +84,7 @@ public class ImageService {
         String extentions = fileName.substring(fileName.lastIndexOf(".") + 1);
         log.debug("extentions is: {}", extentions);
         return extentions;
+
     }
 }
 
