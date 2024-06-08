@@ -1,6 +1,5 @@
 package ru.skypro.homework.service;
 
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -20,9 +19,6 @@ import ru.skypro.homework.repository.CommentRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Collectors;
-
-import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
 public class AdsService {
