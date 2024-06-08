@@ -4,9 +4,13 @@ package ru.skypro.homework.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,12 +24,11 @@ import java.util.List;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @EnableWebSecurity
+@EnableMethodSecurity
 @Configuration
 public class WebSecurityConfig {
 
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
-
-
 
 
     private static final String[] AUTH_WHITELIST = {
@@ -39,28 +42,22 @@ public class WebSecurityConfig {
             "/image"
     };
 
-    public WebSecurityConfig(CustomAccessDeniedHandler customAccessDeniedHandler, MyUserDetailsService myUserDetailsService) {
+    public WebSecurityConfig(CustomAccessDeniedHandler customAccessDeniedHandler) {
         this.customAccessDeniedHandler = customAccessDeniedHandler;
-
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors((cors) -> cors.configurationSource(corsConfigurationSource()))
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(
-                        authorization ->
-                                authorization
-                                        .requestMatchers(AUTH_WHITELIST)
-                                        .permitAll()
-                                        .requestMatchers("/ads/", "/users/", "/image/**")
-                                        .authenticated())
-                .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer
-                        .loginPage("/login")
-                        .permitAll())
-                .exceptionHandling(e -> e.accessDeniedHandler(customAccessDeniedHandler)
-                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .httpBasic(withDefaults());
+                .authorizeHttpRequests(authorization ->
+                        authorization
+                                .requestMatchers(AUTH_WHITELIST).permitAll()
+                                .requestMatchers("/ads/**", "/users/**", "/image/**").authenticated())
+                .exceptionHandling(e ->
+                        e.accessDeniedHandler(customAccessDeniedHandler)
+                                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+                .httpBasic(withDefaults());  // Only Basic Auth
         return http.build();
     }
 
@@ -81,5 +78,18 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService());
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
 
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return new MyUserDetailsService();
+
+
+    }
 }
