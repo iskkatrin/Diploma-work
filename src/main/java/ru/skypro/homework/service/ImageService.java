@@ -38,7 +38,7 @@ public class ImageService {
         this.imageRepository = imageRepository;
     }
 
-
+    //Загружает изображение для пользователя по его ID.
     public void uploadImage(Long userId, MultipartFile image) throws IOException {
         UserEntity userEntity = userService.getUserById(userId); //поиск нужного студента
 
@@ -61,10 +61,8 @@ public class ImageService {
             bis.transferTo(bos);
         }
 
-
         ImageEntity newImageEntity;
         newImageEntity = imageRepository.findImageByFilePath(filePath.toString());
-
 
         if (newImageEntity == null) {
             newImageEntity = new ImageEntity();
@@ -75,14 +73,10 @@ public class ImageService {
         newImageEntity.setMediaType(image.getContentType());
         newImageEntity.setFileSize(image.getSize());
 
-//        user.setAvatar(newImage);
-        //добавить студенту его аву
-//        userService.update(user);
         imageRepository.save(newImageEntity);
-
     }
 
-
+    //Извлекает расширение файла из его имени.
     private String getExtensions(String fileName) {
         String extentions = fileName.substring(fileName.lastIndexOf(".") + 1);
         log.debug("extentions is: {}", extentions);

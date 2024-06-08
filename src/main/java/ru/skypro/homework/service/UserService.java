@@ -26,19 +26,18 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
+    //Находит пользователя по его идентификатору.
     public UserEntity findUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
+
+    //Преобразует сущность пользователя в DTO.
     public UserDTO getUserDTO(UserEntity userEntity) {
         return userMapper.userEntityToUserDTO(userEntity);
     }
 
-    public UserEntity getUser(UserDTO userDTO) {
-        return userMapper.userDTOToUserEntity(userDTO);
-    }
-
-
+    //Находит пользователя по его идентификатору.
     public UserEntity getUserById(Long id) {
         UserEntity byUserId = userRepository.findByUserId(id);
         if (byUserId == null) {
@@ -46,14 +45,18 @@ public class UserService {
         }
         return byUserId;
     }
+
+    //Сохраняет пользователя.
     public void saveUser(UserEntity userEntity) {
         userRepository.save(userEntity);
     }
 
+    //Находит пользователя по его email.
     public UserEntity findByUsername(String email) {
         return userRepository.findByEmail(email);
     }
 
+    //Обновляет информацию о пользователе.
     public UpdateUser updateUser(Long userId, UpdateUser updateUser) {
         UserEntity userEntity = userRepository.findByUserId(userId);
         if (updateUser.getFirstName() != null) {
@@ -69,10 +72,12 @@ public class UserService {
         return updateUser;
     }
 
+    //Находит DTO пользователя по его идентификатору.
     public UserDTO findUserDTO(Long userId) {
         return getUserDTO(findUser(userId));
     }
 
+    //Обновляет пароль пользователя.
     public void updatePassword(Long userId, NewPassword newPassword) {
         UserEntity userEntity = userRepository.findByUserId(userId);
         if (userEntity.getPassword().equals(newPassword.getCurrentPassword())) {
@@ -82,5 +87,3 @@ public class UserService {
         }
     }
 }
-
-
