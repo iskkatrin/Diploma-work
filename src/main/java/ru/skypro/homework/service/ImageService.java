@@ -145,4 +145,9 @@ public class ImageService {
         log.debug("extentions is: {}", extentions);
         return extentions;
     }
+    public ImageEntity getImageById(Long id) {
+        log.info("Получение изображения по идентификатору: {}", id);
+        return imageRepository.findById(id).orElseThrow(
+                () -> new RuntimeException());
+    }
 }
