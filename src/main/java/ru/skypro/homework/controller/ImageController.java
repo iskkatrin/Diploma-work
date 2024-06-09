@@ -31,7 +31,7 @@ public class ImageController {
     }
 
     @GetMapping(
-            value = "{id}",
+            value = "/{id}",
             produces = {
                     MediaType.IMAGE_PNG_VALUE,
                     MediaType.IMAGE_JPEG_VALUE,

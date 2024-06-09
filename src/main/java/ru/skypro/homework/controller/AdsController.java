@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.config.MyUserPrincipal;
 import ru.skypro.homework.dto.*;
+import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.service.AdsService;
 import org.springframework.security.core.Authentication;
 
@@ -113,8 +114,9 @@ public class AdsController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<List<AdDTO>> getAdsMe() {
-        List<AdDTO> ads = adsService.getAdsForLoggedInUser();
+    public ResponseEntity<List<AdDTO>> getAdsMe(@AuthenticationPrincipal MyUserPrincipal principal) {
+        UserEntity userEntity = principal.getUser();
+        List<AdDTO> ads = adsService.getAdsForLoggedInUser(userEntity);
         return ResponseEntity.ok(ads);
     }
 }

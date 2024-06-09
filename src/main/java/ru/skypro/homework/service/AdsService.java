@@ -20,6 +20,7 @@ import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,14 +35,13 @@ public class AdsService {
     private AdsRepository adsRepository;
     @Autowired
     private  CommentRepository commentRepository;
-
-    private final AdMapper adMapper;
-
-
-    public AdsService(AdMapper adMapper) {
-
-        this.adMapper = adMapper;
-    }
+    @Autowired
+    private AdMapper adMapper;
+//
+//    public AdsService(AdMapper adMapper) {
+//
+//        this.adMapper = adMapper;
+//    }
 
     public AdDTO getAdDTO(AdEntity adEntity) {
         return adMapper.adEntityToAdDTO(adEntity);
@@ -125,8 +125,14 @@ public class AdsService {
         }
     }
 
-    public List<AdDTO> getAdsForLoggedInUser() {
-        return null;
+    public List<AdDTO> getAdsForLoggedInUser(UserEntity userEntity) {
+
+        List<AdEntity> adEntity1 = userEntity.getAdEntity();
+        List<AdDTO> adDTOList = new ArrayList<>(List.of());
+        for (AdEntity adEntity : adEntity1) {
+            adDTOList.add(getAdDTO(adEntity));
+        }
+        return adDTOList;
     }
 
 
