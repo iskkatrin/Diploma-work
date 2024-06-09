@@ -4,15 +4,17 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ru.skypro.homework.dto.NewPassword;
-import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.dto.UserDTO;
+import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.dto.*;
+import ru.skypro.homework.entity.AdEntity;
+import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exceptions.NotEditUserPasswordException;
 import ru.skypro.homework.exceptions.UserNotFoundException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -82,6 +84,20 @@ public class UserService {
         } else {
             throw new NotEditUserPasswordException("not edited password");
         }
+    }
+    public UserDTO saveAvatar (MultipartFile image, UserEntity userEntity) {
+        ImageEntity imageEntity = new  ImageEntity();
+        try {
+            imageEntity.setData(image.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        imageEntity.setMediaType(image.getContentType());
+        imageEntity.setFileSize(image.getSize());
+        userEntity.setImageEntity(imageEntity);
+
+        UserEntity saved = userRepository.save(userEntity);
+        return userMapper.userEntityToUserDTO(saved);
     }
 }
 

@@ -10,8 +10,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.config.MyUserPrincipal;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDTO;
@@ -107,18 +109,9 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    public ResponseEntity<?> updateUserImage(@RequestParam("image") MultipartFile image) {
-        //заглушка тк не получаем пользователя(Лола исправить)
-        Long userId = 1L;
-        try {
-            service.uploadImage(userId, image);
-        } catch (NotSaveAvatarEx e) {
-            log.warn("NotSaveAvatarException in save image");
-            return ResponseEntity.badRequest().build();
-        } catch (IOException e) {
-            log.warn("IOException in save image");
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<?> updateUserImage(@RequestParam("image") MultipartFile image, @AuthenticationPrincipal MyUserPrincipal principal) {
+
+     userService.saveAvatar(image,principal.getUser());
         return ResponseEntity.ok().build();
     }
 }

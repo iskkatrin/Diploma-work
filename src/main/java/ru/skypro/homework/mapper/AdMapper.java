@@ -1,6 +1,7 @@
 package ru.skypro.homework.mapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.config.MapperConfig;
 import ru.skypro.homework.dto.AdDTO;
@@ -10,6 +11,9 @@ import ru.skypro.homework.entity.AdEntity;
 
 @Service
 public class AdMapper {
+    @Value("${download.url}")
+    protected String downloadUrl;
+
     private final MapperConfig mapper;
 
     @Autowired
@@ -19,6 +23,8 @@ public class AdMapper {
 
     public AdDTO adEntityToAdDTO(AdEntity adEntity) {
         AdDTO adDTO = mapper.getMapper().map(adEntity, AdDTO.class);
+        adDTO.setImage(adEntity.getImageEntity() == null ? "" : downloadUrl + adEntity.getImageEntity().getImageId());
+
         adDTO.setAuthor(adEntity.getUserEntity().getUserId().intValue());
         adDTO.setPk(adEntity.getId().intValue());
         return adDTO;
@@ -42,7 +48,8 @@ public class AdMapper {
     public ExtendedAd adEntityToExtendedAd(AdEntity adEntity) {
         ExtendedAd extendedAd = new ExtendedAd();
         extendedAd.setPk(adEntity.getId().intValue()); // Приводим Long к Integer
-        extendedAd.setImage(adEntity.getImage());
+        extendedAd.setImage(adEntity.getImageEntity() == null ? "" : downloadUrl + adEntity.getImageEntity().getImageId());
+
         extendedAd.setPrice(adEntity.getPrice());
         extendedAd.setTitle(adEntity.getTitle());
         return extendedAd;

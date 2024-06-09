@@ -8,10 +8,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.config.MyUserPrincipal;
 import ru.skypro.homework.dto.*;
 import ru.skypro.homework.service.AdsService;
 import org.springframework.security.core.Authentication;
@@ -39,16 +42,16 @@ public class AdsController {
         return ResponseEntity.ok(ads);
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Добавление объявления")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Created"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    public ResponseEntity<AdDTO> addAd (@RequestParam("properties") CreateOrUpdateAd properties,
-                                       @RequestParam("image") MultipartFile image,
-                                       Authentication authentication) throws IOException {
-        AdDTO ad = adsService.addAd(properties, image, authentication);
+    public ResponseEntity<AdDTO> addAd (@RequestPart("properties") CreateOrUpdateAd properties,
+                                        @RequestPart("image") MultipartFile image,
+                                        @AuthenticationPrincipal MyUserPrincipal authentication) throws IOException {
+        AdDTO ad = adsService.addAd(properties, image, authentication.getUser());
         return new ResponseEntity<>(ad, HttpStatus.CREATED);
     }
 
@@ -66,7 +69,7 @@ public class AdsController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(principal.username, #adId)")
+    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
 
     @Operation(summary = "Удаление объявления")
     @ApiResponses({
@@ -75,13 +78,13 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<Void> removeAd(@PathVariable int id) {
+    public ResponseEntity<Void> removeAd(@PathVariable int id, @AuthenticationPrincipal MyUserPrincipal principal) {
         adsService.removeAd(id);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(principal.username, #adId)")
+    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
     @Operation(summary = "Обновление информации об объявлении")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
@@ -96,7 +99,7 @@ public class AdsController {
     }
 
     @PatchMapping("/{id}/image")
-    @PreAuthorize(value = "hasRole('ADMIN') or @adsService.isAuthorAd(principal.getEmail(), #adId)")
+    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
     @Operation(summary = "Обновление картинки объявления")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),

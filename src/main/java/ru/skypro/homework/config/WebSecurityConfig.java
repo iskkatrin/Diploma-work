@@ -39,7 +39,7 @@ public class WebSecurityConfig {
             "/login",
             "/register",
             "/ads",
-            "/image"
+            "/image/**"
     };
 
     public WebSecurityConfig(CustomAccessDeniedHandler customAccessDeniedHandler) {
@@ -53,7 +53,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authorization ->
                         authorization
                                 .requestMatchers(AUTH_WHITELIST).permitAll()
-                                .requestMatchers("/ads/**", "/users/**", "/image/**").authenticated())
+                                .requestMatchers("/ads/**", "/users/**").authenticated())
                 .exceptionHandling(e ->
                         e.accessDeniedHandler(customAccessDeniedHandler)
                                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
@@ -89,7 +89,5 @@ public class WebSecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return new MyUserDetailsService();
-
-
     }
 }

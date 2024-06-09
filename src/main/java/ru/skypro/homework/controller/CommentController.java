@@ -39,7 +39,7 @@ public class CommentController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(principal.username, #adId)")
+    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
     @Operation(summary = "Добавление комментария к объявлению")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
@@ -53,7 +53,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
-    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(principal.username, #adId)")
+    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
     @Operation(summary = "Удаление комментария")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -67,7 +67,7 @@ public class CommentController {
     }
 
     @PatchMapping("/{commentId}")
-    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(principal.username, #adId)")
+    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
     @Operation(summary = "Обновление комментария")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",

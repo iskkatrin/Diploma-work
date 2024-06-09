@@ -41,7 +41,6 @@ public class MyUserDetailsService implements UserDetailsManager {
 
     @Override
     public void updateUser(UserDetails user) {
-
     }
 
     @Override

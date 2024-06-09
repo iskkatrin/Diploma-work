@@ -12,11 +12,14 @@ import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 //import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.entity.ImageEntity;
+import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exceptions.AdNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdsRepository;
 import ru.skypro.homework.repository.CommentRepository;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -55,8 +58,19 @@ public class AdsService {
                 .collect(Collectors.toList());
     }
 
-    public AdDTO addAd(CreateOrUpdateAd properties, MultipartFile image, Authentication authentication) {
+    public AdDTO addAd(CreateOrUpdateAd properties, MultipartFile image, UserEntity userEntity) {
         AdEntity adEntity = adMapper.createOrUpdateAdToAdEntity(properties);
+        adEntity.setUserEntity(userEntity);
+        ImageEntity imageEntity = new  ImageEntity();
+        try {
+            imageEntity.setData(image.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        imageEntity.setMediaType(image.getContentType());
+        imageEntity.setFileSize(image.getSize());
+        adEntity.setImageEntity(imageEntity);
+
         // Сохранение изображения и установка пути к изображению в сущность
         adEntity.setImage(image.getOriginalFilename());
         AdEntity savedAd = adsRepository.save(adEntity);
@@ -64,7 +78,7 @@ public class AdsService {
     }
 
     public List<CommentEntity> getCommentsForAd(int id) {
-        return commentRepository.findByAdId((long) id);
+            return commentRepository.findByAdId((long) id);
     }
 
     public CommentEntity addCommentToAd(int id, CreateOrUpdateComment comment) {

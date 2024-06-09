@@ -30,4 +30,7 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "userEntity")
     private List<AdEntity> adEntity;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "image_id")
+    private ImageEntity imageEntity;
 }
