@@ -21,7 +21,7 @@ public class UserMapper {
     public UserDTO userEntityToUserDTO(UserEntity userEntity) {
         UserDTO userDTO = mapper.getMapper().map(userEntity, UserDTO.class);
         userDTO.setId(userEntity.getUserId().intValue());
-        userDTO.setImage(userEntity.getImageEntity() == null ? "" : downloadUrl + userEntity.getImageEntity().getImageId());
+        userDTO.setImage(userEntity.getImageEntity() == null ? null : downloadUrl + userEntity.getImageEntity().getImageId());
         return userDTO;
     }
 

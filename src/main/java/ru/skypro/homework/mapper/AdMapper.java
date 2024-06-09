@@ -23,7 +23,7 @@ public class AdMapper {
 
     public AdDTO adEntityToAdDTO(AdEntity adEntity) {
         AdDTO adDTO = mapper.getMapper().map(adEntity, AdDTO.class);
-        adDTO.setImage(adEntity.getImageEntity() == null ? "" : downloadUrl + adEntity.getImageEntity().getImageId());
+        adDTO.setImage(adEntity.getImageEntity() == null ? null : downloadUrl + adEntity.getImageEntity().getImageId());
 
         adDTO.setAuthor(adEntity.getUserEntity().getUserId().intValue());
         adDTO.setPk(adEntity.getId().intValue());
@@ -48,7 +48,7 @@ public class AdMapper {
     public ExtendedAd adEntityToExtendedAd(AdEntity adEntity) {
         ExtendedAd extendedAd = new ExtendedAd();
         extendedAd.setPk(adEntity.getId().intValue()); // Приводим Long к Integer
-        extendedAd.setImage(adEntity.getImageEntity() == null ? "" : downloadUrl + adEntity.getImageEntity().getImageId());
+        extendedAd.setImage(adEntity.getImageEntity() == null ? null : downloadUrl + adEntity.getImageEntity().getImageId());
 
         extendedAd.setPrice(adEntity.getPrice());
         extendedAd.setTitle(adEntity.getTitle());

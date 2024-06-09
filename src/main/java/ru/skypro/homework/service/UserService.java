@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.*;
-import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.ImageEntity;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exceptions.NotEditUserPasswordException;
@@ -85,7 +84,7 @@ public class UserService {
             throw new NotEditUserPasswordException("not edited password");
         }
     }
-    public UserDTO saveAvatar (MultipartFile image, UserEntity userEntity) {
+    public void saveAvatar (MultipartFile image, UserEntity userEntity) {
         ImageEntity imageEntity = new  ImageEntity();
         try {
             imageEntity.setData(image.getBytes());
@@ -97,7 +96,7 @@ public class UserService {
         userEntity.setImageEntity(imageEntity);
 
         UserEntity saved = userRepository.save(userEntity);
-        return userMapper.userEntityToUserDTO(saved);
+        userMapper.userEntityToUserDTO(saved);
     }
 }
 

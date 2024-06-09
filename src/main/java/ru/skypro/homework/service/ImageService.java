@@ -91,6 +91,6 @@ public class ImageService {
     public ImageEntity getImageById(Long id) {
         log.info("Получение изображения по идентификатору: {}", id);
         return imageRepository.findById(id).orElseThrow(
-                () -> new RuntimeException());
+                RuntimeException::new);
     }
 }
