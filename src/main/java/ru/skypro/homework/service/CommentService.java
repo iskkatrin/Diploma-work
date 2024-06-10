@@ -1,10 +1,13 @@
 package ru.skypro.homework.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.entity.CommentEntity;
+import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exceptions.CommentNotFoundException;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.CommentRepository;
@@ -16,17 +19,23 @@ import java.util.List;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
+    @Autowired
+    private UserService userService;
 
     public CommentService(CommentRepository commentRepository, CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
     }
 
-    public CommentDTO addComment(long adId, CreateOrUpdateComment comment) {
+    public CommentDTO addComment(Authentication authentication, int adId, CreateOrUpdateComment comment) {
         CommentEntity newComment = new CommentEntity();
-        newComment.setAdId(adId);
+        UserEntity userEntity = userService.findByUsername(authentication.getName()).get();
+        newComment.setAuthor(userEntity.getUserId().intValue());
+        newComment.setUserEntity(userEntity);
+        newComment.setAdId((long) adId);
         newComment.setText(comment.getText());
-
+        newComment.setAuthorFirstName(userEntity.getFirstName());
+        newComment.setAuthorImage("/image/" + userEntity.getImageEntity().getImageId());
         CommentEntity savedComment = commentRepository.save(newComment);
         return commentMapper.commentEntityToCommentDTO(savedComment);
     }

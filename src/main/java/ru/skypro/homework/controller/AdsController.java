@@ -42,9 +42,8 @@ public class AdsController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK")
     })
-    public ResponseEntity<List<AdDTO>> getAllAds() {
-        List<AdDTO> ads = adsService.getAllAds();
-        return ResponseEntity.ok(ads);
+    public ResponseEntity<AdsDTO> getAllAds() {
+        return ResponseEntity.ok(adsService.getAds());
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -118,10 +117,10 @@ public class AdsController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<List<AdDTO>> getAdsMe(/*@AuthenticationPrincipal MyUserPrincipal principal*/ Authentication authentication) {
+    public ResponseEntity<AdsDTO> getAdsMe(/*@AuthenticationPrincipal MyUserPrincipal principal*/ Authentication authentication) {
 //        UserEntity userEntity = principal.getUser();
         UserEntity userEntity = userService.findByUsername(authentication.getName()).get();
-        List<AdDTO> ads = adsService.getAdsForLoggedInUser(userEntity);
+        AdsDTO ads = adsService.getAdsForLoggedInUser(userEntity);
         return ResponseEntity.ok(ads);
     }
 }

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.CommentDTO;
 import ru.skypro.homework.dto.CommentsDTO;
@@ -47,8 +48,10 @@ public class CommentController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<CommentDTO> addComment(@PathVariable("adId") long adId, @RequestBody CreateOrUpdateComment comment) {
-        CommentDTO addedCommentDTO = commentService.addComment(adId, comment);
+    public ResponseEntity<CommentDTO> addComment(@PathVariable("adId") int adId,
+                                                 @RequestBody CreateOrUpdateComment comment,
+                                                 Authentication authentication) {
+        CommentDTO addedCommentDTO = commentService.addComment(authentication,adId, comment);
         return ResponseEntity.ok(addedCommentDTO);
     }
 

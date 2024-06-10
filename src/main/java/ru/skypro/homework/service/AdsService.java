@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.dto.AdDTO;
-import ru.skypro.homework.dto.CreateOrUpdateAd;
-import ru.skypro.homework.dto.CreateOrUpdateComment;
-import ru.skypro.homework.dto.ExtendedAd;
+import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.AdEntity;
 import ru.skypro.homework.entity.CommentEntity;
 //import ru.skypro.homework.mapper.AdMapper;
@@ -95,6 +92,19 @@ public class AdsService {
         return commentRepository.save(newComment); // Сохранение нового комментария
     }
 
+    public AdsDTO getAds() {
+        AdsDTO adsDTO = new AdsDTO();
+        List<AdDTO> result = new ArrayList<>();
+        List<AdEntity> all = adsRepository.findAll();
+
+        for (AdEntity adEntity : all) {
+            result.add(adMapper.adEntityToAdDTO(adEntity));
+        }
+        adsDTO.setResults(result);
+        adsDTO.setCount(result.size());
+        return adsDTO;
+    }
+
     public ExtendedAd getAdById(int id) {
         Optional<AdEntity> adEntityOptional = adsRepository.findById((long) id);
         if (adEntityOptional.isPresent()) {
@@ -132,16 +142,17 @@ public class AdsService {
         }
     }
 
-    public List<AdDTO> getAdsForLoggedInUser(UserEntity userEntity) {
-
+    public AdsDTO getAdsForLoggedInUser(UserEntity userEntity) {
+        AdsDTO adsDTO = new AdsDTO();
         List<AdEntity> adEntity1 = userEntity.getAdEntity();
-        List<AdDTO> adDTOList = new ArrayList<>(List.of());
+        List<AdDTO> result = new ArrayList<>(List.of());
         for (AdEntity adEntity : adEntity1) {
-            adDTOList.add(getAdDTO(adEntity));
+            result.add(getAdDTO(adEntity));
             log.info("adDto name is: {}", adEntity.getTitle());
         }
-        return adDTOList;
-//        return null;
+        adsDTO.setResults(result);
+        adsDTO.setCount(result.size());
+        return adsDTO;
     }
 
 
