@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -19,14 +20,14 @@ import ru.skypro.homework.entity.CommentEntity;
 import ru.skypro.homework.service.CommentService;
 
 @RestController
-@RequestMapping("/ads/{adId}/comments")
+@RequestMapping("/ads")
 @Slf4j
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
 
-    @GetMapping
+    @GetMapping("/{id}/comments")
     @Operation(summary = "Получение комментариев объявления")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
@@ -34,13 +35,13 @@ public class CommentController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<CommentsDTO> getComments(@PathVariable("adId") long adId) {
-        CommentsDTO comments = commentService.getComments(adId);
+    public ResponseEntity<CommentsDTO> getComments(@PathVariable("id") long id) {
+        CommentsDTO comments = commentService.getComments(id);
         return ResponseEntity.ok(comments);
     }
 
-    @PostMapping
-    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
+    @PostMapping(value = "/{id}/comments")
+//    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
     @Operation(summary = "Добавление комментария к объявлению")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
@@ -48,15 +49,19 @@ public class CommentController {
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<CommentDTO> addComment(@PathVariable("adId") int adId,
-                                                 @RequestBody CreateOrUpdateComment comment,
-                                                 Authentication authentication) {
-        CommentDTO addedCommentDTO = commentService.addComment(authentication,adId, comment);
+    public ResponseEntity<CommentDTO> addComment(Authentication authentication,
+                                                 @PathVariable("id") int id,
+                                                 @RequestBody CreateOrUpdateComment comment
+                                                 /*Authentication authentication*/) {
+
+//        log.info("user name in commentController is {}",authentication.getName());
+        CommentDTO addedCommentDTO = commentService.addComment(authentication, id, comment);
+        log.info("comment dto in commentController is {}", addedCommentDTO);
         return ResponseEntity.ok(addedCommentDTO);
     }
 
-    @DeleteMapping("/{commentId}")
-    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
+    @DeleteMapping("/{adId}/comments/{commentId}")
+//    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
     @Operation(summary = "Удаление комментария")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -64,13 +69,13 @@ public class CommentController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<Void> deleteComment(@PathVariable("adId") long adId, @PathVariable("commentId") long commentId) {
+    public ResponseEntity<Void> deleteComment(@PathVariable("adId") int adId, @PathVariable("commentId") long commentId) {
         commentService.deleteComment(adId, commentId);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/{commentId}")
-    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
+    @PatchMapping("/{adId}/comments/{commentId}")
+//    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
     @Operation(summary = "Обновление комментария")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",

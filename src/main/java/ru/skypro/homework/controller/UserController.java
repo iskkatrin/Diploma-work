@@ -18,6 +18,7 @@ import ru.skypro.homework.config.MyUserPrincipal;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDTO;
+import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.exceptions.NotEditUserPasswordException;
 import ru.skypro.homework.exceptions.NotSaveAvatarEx;
 import ru.skypro.homework.service.ImageService;
@@ -88,10 +89,13 @@ public class UserController {
 
     @PatchMapping("/me")
     @Operation(summary = "Обновление информации об авторизованном пользователе")
-    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser) {
-        //заглушка тк не знаем какой пользователь(Лола поправить)
-        Long userId = 1L;
-        return ResponseEntity.ok(userService.updateUser(userId, updateUser));
+    public ResponseEntity<UpdateUser> updateUser(@RequestBody UpdateUser updateUser, Authentication authentication) {
+        return ResponseEntity.ok(
+                userService.updateUser(
+                        userService.findByUsername(
+                                authentication.getName()).get(),
+                        updateUser)
+        );
     }
 
     @PatchMapping("/me/image")

@@ -93,4 +93,8 @@ public class ImageService {
         return imageRepository.findById(id).orElseThrow(
                 () -> new RuntimeException());
     }
+
+    public void save(ImageEntity imageEntity) {
+        imageRepository.save(imageEntity);
+    }
 }

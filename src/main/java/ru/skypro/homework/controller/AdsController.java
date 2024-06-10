@@ -73,7 +73,7 @@ public class AdsController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
+//    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
 
     @Operation(summary = "Удаление объявления")
     @ApiResponses({
@@ -88,7 +88,7 @@ public class AdsController {
     }
 
     @PatchMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
+//    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
     @Operation(summary = "Обновление информации об объявлении")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
@@ -103,7 +103,7 @@ public class AdsController {
     }
 
     @PatchMapping("/{id}/image")
-    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
+//    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
     @Operation(summary = "Обновление картинки объявления")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK"),
@@ -111,7 +111,8 @@ public class AdsController {
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "404", description = "Not found")
     })
-    public ResponseEntity<Void> updateImage(@PathVariable int id, @RequestParam("image") MultipartFile image) {
+    public ResponseEntity<Void> updateImage(@PathVariable int id,
+                                            @RequestParam("image") MultipartFile image) {
         adsService.updateAdImage(id, image);
         return ResponseEntity.ok().build();
     }

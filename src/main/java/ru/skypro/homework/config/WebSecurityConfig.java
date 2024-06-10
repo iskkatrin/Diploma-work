@@ -46,6 +46,8 @@ public class WebSecurityConfig {
             "/image/**",
             "/ads",
             "/register"
+//            "/ads/**",
+//            "/users/**"
     };
 //
 //    public WebSecurityConfig(CustomAccessDeniedHandler customAccessDeniedHandler) {
@@ -60,7 +62,7 @@ public class WebSecurityConfig {
                         authorization
                                 .requestMatchers(AUTH_WHITELIST)
                                 .permitAll()
-                                .requestMatchers("/ads/**", "/users/**")
+                                .requestMatchers("/**")
                                 .authenticated())
 //                .exceptionHandling(e ->
 //                        e.accessDeniedHandler(customAccessDeniedHandler)

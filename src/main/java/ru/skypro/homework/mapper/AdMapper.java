@@ -23,7 +23,7 @@ public class AdMapper {
 
     public AdDTO adEntityToAdDTO(AdEntity adEntity) {
         AdDTO adDTO = mapper.getMapper().map(adEntity, AdDTO.class);
-        adDTO.setImage(adEntity.getImageEntity() == null ? "" : downloadUrl + adEntity.getImageEntity().getImageId());
+        adDTO.setImage(adEntity.getImageEntity() == null ? null : downloadUrl + adEntity.getImageEntity().getImageId());
 
         adDTO.setAuthor(adEntity.getUserEntity().getUserId().intValue());
         adDTO.setPk(adEntity.getId().intValue());

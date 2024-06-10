@@ -36,6 +36,8 @@ public class AdsService {
     private  CommentRepository commentRepository;
     @Autowired
     private AdMapper adMapper;
+    @Autowired
+    private ImageService imageService;
 
     private static final Logger log = LoggerFactory.getLogger(AdsService.class);
 //
@@ -134,9 +136,21 @@ public class AdsService {
     public void updateAdImage(int id, MultipartFile image) {
         Optional<AdEntity> adEntityOptional = adsRepository.findById((long) id);
         if (adEntityOptional.isPresent()) {
+            log.info("without if------------------------------------");
             AdEntity adEntity = adEntityOptional.get();
             adEntity.setImage(image.getOriginalFilename());
+            ImageEntity imageEntity = new ImageEntity();
+            try {
+                imageEntity.setData(image.getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            imageEntity.setMediaType(image.getContentType());
+            imageEntity.setFileSize(imageEntity.getFileSize());
+            adEntity.setImageEntity(imageEntity);
             adsRepository.save(adEntity);
+            imageService.save(imageEntity);
+
         } else {
             throw new AdNotFoundException("Ad not found");
         }
@@ -160,5 +174,13 @@ public class AdsService {
 
         AdEntity adEntity = adsRepository.findById(adId).orElseThrow(RuntimeException::new);
         return adEntity.getUserEntity().getEmail().equals(email);
+    }
+
+    public AdEntity findById(Long id) {
+        try {
+            return adsRepository.findById(id).get();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

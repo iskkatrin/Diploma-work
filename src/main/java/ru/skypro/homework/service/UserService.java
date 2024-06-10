@@ -58,8 +58,7 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public UpdateUser updateUser(Long userId, UpdateUser updateUser) {
-        UserEntity userEntity = userRepository.findByUserId(userId);
+    public UpdateUser updateUser(UserEntity userEntity, UpdateUser updateUser) {
         if (updateUser.getFirstName() != null) {
             userEntity.setFirstName(updateUser.getFirstName());
         }

@@ -5,7 +5,7 @@ import lombok.NonNull;
 
 @Data
 public class CreateOrUpdateComment {
-    @NonNull//not found validate
+//    @NonNull//not found validate
     private String text;
 //    private Integer adId;
 }

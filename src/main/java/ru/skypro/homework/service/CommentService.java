@@ -20,6 +20,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
     @Autowired
+    private AdsService adsService;
+    @Autowired
     private UserService userService;
 
     public CommentService(CommentRepository commentRepository, CommentMapper commentMapper) {
@@ -27,12 +29,14 @@ public class CommentService {
         this.commentMapper = commentMapper;
     }
 
-    public CommentDTO addComment(Authentication authentication, int adId, CreateOrUpdateComment comment) {
+    public CommentDTO addComment(Authentication authentication, Integer adId, CreateOrUpdateComment comment) {
         CommentEntity newComment = new CommentEntity();
         UserEntity userEntity = userService.findByUsername(authentication.getName()).get();
+//        UserEntity userEntity = userService.findByUsername("admin@example.com").get();
         newComment.setAuthor(userEntity.getUserId().intValue());
         newComment.setUserEntity(userEntity);
         newComment.setAdId((long) adId);
+        newComment.setAdEntity(adsService.findById(adId.longValue()));
         newComment.setText(comment.getText());
         newComment.setAuthorFirstName(userEntity.getFirstName());
         newComment.setAuthorImage("/image/" + userEntity.getImageEntity().getImageId());
@@ -55,7 +59,9 @@ public class CommentService {
 
 
     public void deleteComment(long adId, long commentId) {
-        commentRepository.deleteByCommentIdAndAdId(adId, commentId);
+//        commentRepository.findByCommentId(commentId);
+//        commentRepository.deleteByCommentIdAndAdId(adId, commentId);
+        commentRepository.delete(commentRepository.findByCommentId(commentId));
     }
 
     public CommentDTO updateComment(long adId, long commentId, CreateOrUpdateComment comment) {
