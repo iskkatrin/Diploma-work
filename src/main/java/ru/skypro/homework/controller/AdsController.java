@@ -19,6 +19,7 @@ import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.UserEntity;
 import ru.skypro.homework.service.AdsService;
 import org.springframework.security.core.Authentication;
+import ru.skypro.homework.service.UserService;
 
 
 import java.io.IOException;
@@ -32,6 +33,9 @@ public class AdsController {
 
     @Autowired
     private AdsService adsService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     @Operation(summary = "Получение всех объявлений")
@@ -114,8 +118,9 @@ public class AdsController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<List<AdDTO>> getAdsMe(@AuthenticationPrincipal MyUserPrincipal principal) {
-        UserEntity userEntity = principal.getUser();
+    public ResponseEntity<List<AdDTO>> getAdsMe(/*@AuthenticationPrincipal MyUserPrincipal principal*/ Authentication authentication) {
+//        UserEntity userEntity = principal.getUser();
+        UserEntity userEntity = userService.findByUsername(authentication.getName()).get();
         List<AdDTO> ads = adsService.getAdsForLoggedInUser(userEntity);
         return ResponseEntity.ok(ads);
     }

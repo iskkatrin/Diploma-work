@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,26 +39,6 @@ public class UserController {
     public UserController(ImageService service) {
         this.service = service;
     }
-
-//    @GetMapping("/{id}")
-//    public UserDTO getUser(@PathVariable Long id) {
-//        UserEntity userEntity = null;
-//        try {
-//            userEntity = userService.getUserById(id);
-//
-//        } catch (Exception e) {
-//            log.info("user is null");
-//            return null;
-//        }
-//        UserDTO userDTO = userService.getUserDTO(userEntity);
-//        return userDTO;
-//    }
-//
-//    @PostMapping
-//    public void createUser(@RequestBody UserDTO userDTO) {
-//        UserEntity userEntity = userService.getUser(userDTO);
-//        userService.saveUser(userEntity);
-//    }
 
     @PostMapping("/set_password")
     @Operation(summary = "Обновление пароля")
@@ -89,10 +70,20 @@ public class UserController {
                     description = "Unauthorized"
             )
     })
-    public ResponseEntity<UserDTO> getUser() {
+    public ResponseEntity<UserDTO> getUser(Authentication authentication) {
+
+        String name = authentication.getName();
+        log.info("user name is: {}", name);
+
         // Здесь заглушка, тк пользователя не получаем(Лола поправить)
-        Long userId = 1L;
-        return ResponseEntity.ok(userService.findUserDTO(userId));
+        UserDTO userDTO = userService.getUserDTO(userService.findByUsername(name).get());
+
+        log.info("user email = {}",userDTO.getEmail());
+//        userDTO.setEmail("admin.com");
+        return ResponseEntity.ok(userDTO);
+
+//        Long userId = 1L;
+//        return ResponseEntity.ok(userService.findUserDTO(userId));
     }
 
     @PatchMapping("/me")

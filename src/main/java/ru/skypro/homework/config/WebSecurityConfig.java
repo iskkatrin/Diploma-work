@@ -1,11 +1,14 @@
 package ru.skypro.homework.config;
 
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,25 +29,28 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 @EnableMethodSecurity
 @Configuration
+@RequiredArgsConstructor
 public class WebSecurityConfig {
-
-    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+//
+//    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
-            "/swagger-ui.html",
             "/v3/api-docs",
             "/webjars/**",
+            "/swagger/**",
+            "/swagger-ui/**",
+            "/api-docs/**",
             "/login",
-            "/register",
+            "/image/**",
             "/ads",
-            "/image/**"
+            "/register"
     };
-
-    public WebSecurityConfig(CustomAccessDeniedHandler customAccessDeniedHandler) {
-        this.customAccessDeniedHandler = customAccessDeniedHandler;
-    }
+//
+//    public WebSecurityConfig(CustomAccessDeniedHandler customAccessDeniedHandler) {
+//        this.customAccessDeniedHandler = customAccessDeniedHandler;
+//    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -52,11 +58,13 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorization ->
                         authorization
-                                .requestMatchers(AUTH_WHITELIST).permitAll()
-                                .requestMatchers("/ads/**", "/users/**").authenticated())
-                .exceptionHandling(e ->
-                        e.accessDeniedHandler(customAccessDeniedHandler)
-                                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+                                .requestMatchers(AUTH_WHITELIST)
+                                .permitAll()
+                                .requestMatchers("/ads/**", "/users/**")
+                                .authenticated())
+//                .exceptionHandling(e ->
+//                        e.accessDeniedHandler(customAccessDeniedHandler)
+//                                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .httpBasic(withDefaults());  // Only Basic Auth
         return http.build();
     }
@@ -66,8 +74,8 @@ public class WebSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -79,15 +87,20 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService());
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new MyUserDetailsService();
-    }
+//
+//    @Bean
+//    public AuthenticationProvider authenticationProvider() {
+//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+//        provider.setUserDetailsService(userDetailsService());
+//        provider.setPasswordEncoder(passwordEncoder());
+//        return provider;
+//    }
+//
+//    @Bean
+//    public UserDetailsService userDetailsService() {
+//        return new MyUserDetailsService();
+//    }
 }

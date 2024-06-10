@@ -42,5 +42,18 @@ public class AdEntity {
     private List<CommentEntity> commentEntity;
 
     private String description;
+
+    @Override
+    public String toString() {
+        return "AdEntity{" +
+                "id=" + id +
+                ", image='" + image + '\'' +
+                ", price=" + price +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", userEntity=" + userEntity +
+                ", imageEntity=" + imageEntity +
+                '}';
+    }
 }
 

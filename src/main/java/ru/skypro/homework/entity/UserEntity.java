@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 
 import jakarta.persistence.*;
+import ru.skypro.homework.dto.Role;
 
 import java.util.List;
 

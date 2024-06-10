@@ -1,6 +1,8 @@
 package ru.skypro.homework.service;
 
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,8 @@ public class AdsService {
     private  CommentRepository commentRepository;
     @Autowired
     private AdMapper adMapper;
+
+    private static final Logger log = LoggerFactory.getLogger(AdsService.class);
 //
 //    public AdsService(AdMapper adMapper) {
 //
@@ -53,6 +57,9 @@ public class AdsService {
 
     public List<AdDTO> getAllAds() {
         List<AdEntity> adEntities = adsRepository.findAll();
+        if (adEntities.isEmpty()) {
+            return null;
+        }
         return adEntities.stream()
                 .map(adMapper::adEntityToAdDTO)
                 .collect(Collectors.toList());
@@ -131,8 +138,10 @@ public class AdsService {
         List<AdDTO> adDTOList = new ArrayList<>(List.of());
         for (AdEntity adEntity : adEntity1) {
             adDTOList.add(getAdDTO(adEntity));
+            log.info("adDto name is: {}", adEntity.getTitle());
         }
         return adDTOList;
+//        return null;
     }
 
 
