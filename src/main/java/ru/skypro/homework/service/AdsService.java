@@ -118,6 +118,11 @@ public class AdsService {
     }
 
     public void removeAd(int id) {
+        AdEntity adEntity = adsRepository.findById((long) id).get();
+        List<CommentEntity> commentEntities = adEntity.getCommentEntity();
+        for (CommentEntity comment : commentEntities) {
+            commentRepository.delete(comment);
+        }
         adsRepository.deleteById((long) id);
     }
 
@@ -146,8 +151,9 @@ public class AdsService {
                 throw new RuntimeException(e);
             }
             imageEntity.setMediaType(image.getContentType());
-            imageEntity.setFileSize(imageEntity.getFileSize());
+            imageEntity.setFileSize(image.getSize());
             adEntity.setImageEntity(imageEntity);
+            adEntity.setImage(image.getOriginalFilename());//
             adsRepository.save(adEntity);
             imageService.save(imageEntity);
 

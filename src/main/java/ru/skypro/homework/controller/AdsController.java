@@ -112,7 +112,7 @@ public class AdsController {
             @ApiResponse(responseCode = "404", description = "Not found")
     })
     public ResponseEntity<Void> updateImage(@PathVariable int id,
-                                            @RequestParam("image") MultipartFile image) {
+                                            @RequestBody MultipartFile image) {
         adsService.updateAdImage(id, image);
         return ResponseEntity.ok().build();
     }
