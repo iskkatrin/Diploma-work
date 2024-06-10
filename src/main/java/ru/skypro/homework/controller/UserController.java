@@ -27,6 +27,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(value = "http://localhost:3000")
 public class UserController {
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);

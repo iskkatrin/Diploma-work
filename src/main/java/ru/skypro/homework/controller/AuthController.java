@@ -17,6 +17,7 @@ import ru.skypro.homework.service.AuthService;
 @CrossOrigin(value = "http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
+
 public class AuthController {
 
     @Autowired

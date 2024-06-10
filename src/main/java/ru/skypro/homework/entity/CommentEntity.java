@@ -4,9 +4,8 @@ package ru.skypro.homework.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Comments;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Data

@@ -21,6 +21,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("/image")
+@CrossOrigin(value = "http://localhost:3000")
 public class ImageController {
 
     private final ImageService imageService;

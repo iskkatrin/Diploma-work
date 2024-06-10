@@ -22,6 +22,7 @@ import ru.skypro.homework.service.CommentService;
 @RequestMapping("/ads/{adId}/comments")
 @Slf4j
 @RequiredArgsConstructor
+@CrossOrigin(value = "http://localhost:3000")
 public class CommentController {
 
     private final CommentService commentService;
@@ -40,8 +41,8 @@ public class CommentController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN') or @adsService.isAuthorAd(#principal.username, #adId)")
-    @Operation(summary = "Добавление комментария к объявлению")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(summary = "Добавление комментария к объявлению hasRole('ROLE_ADMIN')")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(schema = @Schema(implementation = CommentDTO.class))),
